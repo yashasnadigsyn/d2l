@@ -1,0 +1,68 @@
+#+title: Chapter 1
+
+** Generalization :ATTACH:
+:PROPERTIES:
+:ID:       f423c5cb-1230-4bdb-870b-020525efb208
+:END:
+In the standard supervised learning, we assume that the training and test data are drawn independently from identical distributions. This is commonly called ~IID assumption~.
+- ~Training error~: It is a statistic calculated on the training dataset.
+- ~Generalization error~: It is an expectation taken with respect to the underlying distribution. (Or simply, the error that we get when
+  we have large infinite amount of data and apply our model on it)
+
+The training error formula is: (summation)
+
+[[attachment:_20241009_143435screenshot.png]]
+
+The generalization error formula is: (integration)
+
+[[attachment:_20241009_143543screenshot.png]]
+
+Consider the below paragraph:
+#+BEGIN_VERSE
+Crucially, when we evaluate our classifier on the test set, we are working with a fixed classifier (it does not depend on the sample
+of the test set), and thus estimating its error is simply the problem of mean estimation. However the same cannot be said for the
+training set. Note that the model we wind up with depends explicitly on the selection of the training set and thus the training
+error will in general be a biased estimate of the true error on the underlying population. The central question of generalization
+is then when should we expect our training error to be close to the population error (and thus the generalization error).
+#+END_VERSE
+The above paragraph tells that the training error will always be biased and we can never get a generalization error. We can only randomly select a part from training set and use that as a test set.
+
+** Model Complexity
+#+BEGIN_QUOTE
+Karl Popper argued that a scientific theory should be falsifiable, meaning it should make predictions that can be tested and potentially proven wrong. If a theory can explain any and all observations, it's not a useful theory, as it hasn't ruled out any possibilities. In other words, a theory that can explain everything explains nothing.
+In machine learning, this idea translates to the concept of model complexity. A model that can fit arbitrary labels (i.e., explain any observation) is not useful, as it hasn't discovered any meaningful patterns. On the other hand, if a model is restricted in some way, so it can't fit arbitrary labels, and yet it still fits the training data, then it's likely discovered a genuine pattern.
+#+END_QUOTE
+- Fitting training data doesn't guarantee generalizability.
+Without restrictions on the model class, fitting the training data doesn't necessarily mean the model has learned generalizable patterns.
+Here, restrictions means assuming something. Example: assuming Gaussian error in linear regression.
+- Model Complexity matters
+A model that's too complex can fit arbitrary labels, while a simpler model that still fits the data is more likely to have discovered meaningful patterns.
+- Falsifiability
+A model should make predictions that can be tested and potentially proven wrong; otherwise, it's not a useful model.
+
+In short, we need a model that:
+1. Can't explain everything.
+2. Still matches our actual predictions.
+
+Model complexity cannot be just calculated by the number of parameters it has. It is complex to understand the model complexity.
+*** Example: Decision Trees vs Neural Network
+Model 1: Decision Tree
+    Features: 10 (e.g., ear shape, tail length, fur color)
+    Depth: 5 levels
+    Leaf nodes: 50 (possible classifications)
+
+Model 2: Neural Network
+    Features: 1000 (e.g., pixel values)
+    Hidden layers: 5 with 20 neurons each
+    Weight range: -10 to 10
+
+Model 1 has high range of possible classifications (50) than neural network (20) and Model 1 is quite flexible too than Model 2.
+So, we cannot judge a Model's complexity just by the parameters.
+
+*** Summary
+- Use Cross-Validation for selecting a model.
+- More complex models require more data. It is better to choose simple model when we have less data.
+- A model's complexity depends both on the number of parameters and the range of parameters it has.
+** Weight Decay
+Weight Decay is a regularization technique to prevent overfitting in models by limiting the size of the model's parameters.
+Refer: /home/yashasnadigsyn/Documents/ISLP_NEW/Chapter6.org for more details about regularization.

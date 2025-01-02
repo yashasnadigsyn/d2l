@@ -1,0 +1,215 @@
+#+title: Chapter2 - Linear Neural Networks for Classification
+* Softmax Regression
+** Classification Types
+*** Hard Assignments
+- Here, each data point is assigned to one and only category.
+- No overlap between categories.
+- Example: Emails are either Spam or Not Spam.
+*** Soft Assigments
+- Here, the model predicts probabilities for each category.
+- Categories can overlap.
+- Example: Image Classification with dog: 0.8, cat: 0.1, bird: 0.0
+
+** Classification
+To get our feet wet, let’s start with a simple image classification problem.
+Here, each input consists of a 2 × 2 grayscale image. We can represent each pixel value with a single scalar,
+giving us four features 𝑥1, 𝑥2, 𝑥3, 𝑥4. Further, let’s assume that each image belongs to one among the
+categories “cat”, “chicken”, and “dog”
+
+*One-hot encoding*:  one-hot encoding is a vector with as many components as we have categories. The component corresponding to a
+particular instance’s category is set to 1 and all other components are set to 0.
+In our case, a label y would be a three-dimensional vector,
+with (1, 0, 0) corresponding to “cat”, (0, 1, 0) to “chicken”, and (0, 0, 1) to “dog”.
+y ∈ {(1, 0, 0), (0, 1, 0), (0, 0, 1)}.
+
+** Linear Model :ATTACH:
+:PROPERTIES:
+:ID:       0e5432bc-c915-4414-bf4a-dcbd742e3ea1
+:END:
+
+Each output corresponds to its own affine function. In our case, since we have 4 features and 3 possible output categories,
+we need 12 scalars to represent the weights (w with subscripts), and 3 scalars to represent the biases (b with subscripts).
+This yields:
+
+𝑜1 = 𝑥1𝑤11 + 𝑥2𝑤12 + 𝑥3𝑤13 + 𝑥4𝑤14 + 𝑏1,
+𝑜2 = 𝑥1𝑤21 + 𝑥2𝑤22 + 𝑥3𝑤23 + 𝑥4𝑤24 + 𝑏2,
+𝑜3 = 𝑥1𝑤31 + 𝑥2𝑤32 + 𝑥3𝑤33 + 𝑥4𝑤34 + 𝑏3.
+
+Consider the below image:
+
+[[attachment:_20241031_203733screenshot.png]]
+
+Each input pixel will be multiplied by a weight and added together with bias to give a probability output.
+
+** The Softmax
+- Softmax is a single-layer neural network.
+- There are two problems with treating classification as regression:
+  - The outputs will not sum upto 1.
+  - Outputs maybe negative.
+  - Can have problems with outliers.
+Example: For instance, if we assume that there is a positive linear dependency between the number of bedrooms and the likelihood that someone will buy a house, the probability might exceed 1 when it comes to buying a mansion!
+
+*** Approach 1 - Probit Model
+- Assume outputs o are corrupted versions of labels y, with added Gaussian noise ε: y = o + ε, where ε_{i} ~ N(0, σ^2).
+- This does not work well because it is less effective and leads to complex optimization.
+
+*** Approach 2 - Softmax Model :ATTACH:
+:PROPERTIES:
+:ID:       aec752b8-afb4-49c1-8330-92ad18a51b3e
+:END:
+- We can instead use exponential function P(y=i) ∝exp(o_{i})
+- This preserves ordering of categories and normalize outputs to ensure probabilities sum to 1.
+
+*Normalization*:
+    - We can transform any set of values so that they add up to 1 by dividing each by their sum. This process is called normalization.
+
+The softmax function is defined as:
+[[attachment:_20241031_210740screenshot.png]]
+** Maximum Likelihood Estimation
+- MLE is a statistical method to estimate model parameters from observed data.
+- Goal: Find parameters that maximize likelihood of observing data.
+- Likelihood: Probability of observing data given model parameters.
+- Independent and Identically Distributed (iid) assumption: Data points are independent and from same distribution.
+- Formula: p(D|θ) = ∏[p(y_n|x_n, θ)] from n=1 to N
+- Log-Likelihood: LL(θ) = ∑[log(p(y_n|x_n, θ))] from n=1 to N
+- MLE: θ̂_mle = argmax[LL(θ)]
+
+*** Justification - Bayesian Perspective:
+- The Bayesian perspective is a statistical framework that views parameter estimation as a problem of updating probabilities based on new data.
+- *Bayesian inference* is a method of updating the probability of a hypothesis as more evidence or data becomes available.
+- Two conditions:
+  - *Uniform Prior*: Assume a uniform prior distribution over the model parameters θ. This means that before observing the data, all values of θ are equally likely.
+  - *Likelihood*: Compute the likelihood of observing the data given the model parameters θ, which is the same as in MLE.
+
+- *Bayesian Update Rule*: The Bayesian update rule states that the posterior distribution p(θ|D) is proportional to the product of the prior distribution p(θ) and the likelihood p(D|θ).
+    p(θ|D) ∝ p(θ) * p(D|θ)
+
+- Since the prior is uniform, the posterior is proportional to the likelihood.
+    p(θ|D) ∝ p(D|θ)
+
+- The Maximum A Posteriori (MAP) estimate is the value of θ that maximizes the posterior distribution.
+    θ̂_{MAP} = argmax[p(θ|D)]
+
+- Under the uniform prior assumption, the MAP estimate is equivalent to the MLE.
+    θ̂_{MAP} = θ̂_{MLE}
+
+** Log Likelihood :ATTACH:
+:PROPERTIES:
+:ID:       f4b86a5b-9b57-4cae-a078-639a4b5fc65d
+:END:
+- Suppose we roll a K-sided dice N times. Let Yn ∈ {1, . . . , K} be the n’th outcome, where Yn ∼ Cat (θ). We want to estimate the probabilities θ from the dataset D = {yn : n = 1 : N }. The NLL is given by
+- NLL(θ) = − ∑ N_{k}logθ_{k} from k=1 to N.
+- The above NLL(θ) is called cross-entropy loss and used in classification problems.
+- We know the softmax formula and substituting in the above formula and differentiating with respect to o_{j} gives us:
+
+  [[attachment:_20241031_231644screenshot.png]]
+
+[[attachment:_20241031_231704screenshot.png]]
+
+- The above derivative is the difference between the probability assigned by our model, as expressed by the softmax operation, and what actually happened, as expressed by elements in the one-hot label vector.
+- In this sense, it is very similar to what we saw in regression, where the gradient was the difference between the observation 𝑦 and estimate 𝑦^. This is not a coincidence.
+- In any exponential family model, the gradients of the log-likelihood are given by precisely this term.
+** Information Thoery
+*** Entropy
+- Definition: Measures information content or uncertainty in data.
+- Formula: H[P] = - ∑[P(j) log P(j)], where P(j) is probability of outcome j.
+- Interpretation: Minimum number of "nats" (1.44 bits) required to encode data.
+- Example: Coin toss: 50% heads, 50% tails. Entropy: 1 nat (unpredictable). Certain outcome: 0 nats (predictable).
+*** Surprisal
+- Definition: Measures surprise at observing an event.
+- Formula: -log P(j), where P(j) is event probability.
+- Predictable data has low surprisal, making it compressible.
+- Example: Coin toss, 90% heads. Surprisal for tails: -log(0.1) = 2.3 nats (high surprise).
+*** Cross-Entropy
+- Definition: Measures difference between true probabilities (P) and assigned probabilities (Q).
+- Formula: H(P, Q) = - ∑[P(j) log Q(j)].
+* Image Classification Dataset
+** 4.2.1
+- We store an image as a c x h x w tensor, where c is number of color channels, h is the height and w is the width.
+** Concise Implementation of Softmax
+*** Softmax Revisited - Numerical Stability Issues
+**** Introduction
+The softmax function is crucial in multi-class classification to convert logits into probabilities.
+However, it faces numerical instability issues due to overflow and underflow when logits are very large or very small.
+
+**** Problem: Overflow and Underflow in Softmax
+- Softmax formula: softmax(z_i) = exp(z_i) / sum(exp(z_j))
+  - [[Overflow]] If z_i is very large, exp(z_i) becomes extremely large, potentially exceeding the maximum representable value (e.g., Inf).
+  - [[Underflow]] If all z_i values are very large negative numbers, exp(z_i) becomes very close to zero, potentially treated as zero by the computer.
+
+**** Initial Solution: Subtracting the Maximum Logit (Equation 4.5.1) :ATTACH:
+:PROPERTIES:
+:ID:       c292f922-4ff5-49b0-a964-7c36cc859861
+:END:
+- Subtract the maximum logit value (max(z)) from each logit before applying the exponential.
+- Formula: softmax(z_i) = exp(z_i - max(z)) / sum(exp(z_j - max(z)))
+- This prevents overflow as the largest exponentiated term becomes exp(0) = 1.
+- However, it doesn't fully solve the underflow problem, especially when calculating cross-entropy loss.
+- o^{-} = max_{k}o_{k
+  }
+  [[attachment:_20241115_194754screenshot.png]]
+
+**** Smart Solution: Combining Softmax and Cross-Entropy (Equation 4.5.2) :ATTACH:
+:PROPERTIES:
+:ID:       eb3ff691-a5fb-4b33-9d79-f008846b0b98
+:END:
+- Instead of computing softmax probabilities directly, combine softmax and cross-entropy calculations for numerical stability.
+- Cross-entropy loss with softmax: loss = - sum(y_i * log(softmax(z_i)))
+- By substituting softmax and simplifying, we get:
+  loss = - sum(y_i * (z_i - log(sum(exp(z_j)))))
+- This avoids direct computation of exp(z_i), preventing both overflow and underflow.
+
+  [[attachment:_20241115_194522screenshot.png]]
+
+**** The LogSumExp Trick
+- The combined formula effectively incorporates the "LogSumExp trick."
+- LogSumExp trick is a technique to compute log(sum(exp(x_i))) in a numerically stable way.
+- This trick is used within the cross-entropy calculation to handle exponential terms stably.
+* Generalization
+- It refers to model's ability to perform well on unseen data.
+** Theoritical vs Practical
+*** Theoritical Guarantees
+- By Statistics, we can analyze and guarantee generalization. For many models, given a desired level of accuracy, we can theoretically determine the minimum number of training examples needed to achieve that accuracy. This means, in principle, we can know beforehand (a priori) how much data we need to ensure our model will generalize well.
+*** Practical Complexity
+- Even though these guarantees exists, the number of training examples required to achieve reasonable generalization guarantees for deep neural networks, according to these theories, is astronomically large – potentially trillions or more.
+-  However, in practice, deep learning models often achieve excellent generalization with far fewer training examples (thousands or tens of thousands). This stark contrast between theory and practice is a central challenge in understanding deep learning.
+- Instead, we rely on test sets for Generalization.
+** The Test Set
+The fundamental problem is to find how our model does well on unseen data. To calculate this, we will use test set which the model hasn't been trained on.
+*Sample Error (Test Error)*: This is the error rate we observe on the test set.
+*Population Error (True Error)*: This is the error rate we really care about – the error rate the classifier would have on the entire underlying population of data. We can't measure this directly.
+Since, the test set is a sample from the population. We can use test set to find true error.
+
+*Central Limit Theorem*: This fundamental theorem tells us that if we take a large enough sample (our test set), the average error we measure (test error) will be close to the true error. Furthermore, the distribution of possible test errors will be approximately normal (bell-shaped) centered around the true error.
+*Convergence Rate*: Crucially, the theorem also tells us how quickly the test error converges to the true error as we increase the size of the test set. The standard deviation of this distribution (which represents the uncertainty in our estimate) decreases proportionally to the square root of the test set size. This means to reduce the uncertainty (or the potential error in our estimate) by half, we need to quadruple the test set size.
+
+Based on Central Limit Theorem, If we want to be 95% confident that our estimated test error is within a certain range of the true error (e.g., within ±0.01), we need a test set of around 10,000 examples. This is why many benchmark datasets in machine learning use test sets of this size.
+
+*Formula*: To find true error rate from test error rate with confidence,
+
+    ~n = (Z^2 * p * (1 - p)) / E^2~
+
+    where,
+    n -> The required test set size
+    Z -> Z-score: (For 95% confidence, Z-score=1.96)
+    p -> True error rate
+    E -> Margin of error
+** Test Set Reuse
+There are two problems with re-using test set for every new model.
+*** False Discovery
+When you evaluate multiple models on the same test set, the probability of getting a misleadingly good result by chance increases. With each additional model you test, the risk of at least one model appearing to perform better than it actually does (due to random fluctuations in the test set) goes up. This is analogous to the problem of multiple comparisons in statistical hypothesis testing.
+*** Adaptive Overfitting
+The second, and perhaps more insidious, problem is that once you've looked at the test set results for one model, the development of subsequent models might be influenced, even subconsciously, by that knowledge. This means your new model isn't truly independent of the test set anymore. This "information leakage" can lead to overly optimistic performance estimates on the test set because the model has, in a sense, been indirectly tuned to perform well on that specific set of data.
+* Environment and Distribution Shift
+A model trained on one distribution of data may perform poorly when deployed in environments where the data distribution is different.
+Consider a model that trained on a dataset that resulted in saying, those who wear shoes will often repay debt and those who wear chappals will often default. If deployed naively, applicants might adapt their behavior (everyone starts wearing shoes!), rendering the model useless.
+
+** Types of Distribution Shift
+*Covariate Shift*: The distribution of input features (covariates) changes, but the relationship between features and labels remains the same. Example: Training a cat vs. dog classifier on photos but deploying it on cartoon images.
+*Label Shift*: The distribution of labels changes, but the relationship between features and labels remains constant. Example: A medical diagnosis model where the prevalence of diseases changes over time, but the symptoms associated with each disease stay the same.
+*Concept Shift*: The very definition of the labels changes over time or across different environments. Example: The meaning of the word "cool" or the criteria for a particular diagnosis might change.
+
+** Examples of Distribution Shift
+*Medical Diagnostics*: Using student blood samples as healthy controls when developing a blood test for a disease that affects older men. This leads to significant covariate shift.
+*Self-Driving Cars*: Training a roadside detector on synthetic data with simplistic textures, leading to failure in real-world scenarios.
+*Non-stationary Distributions*: Models that become outdated because the data distribution changes over time (e.g., a spam filter, a product recommendation system).
