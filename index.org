@@ -1,0 +1,12 @@
+#+title: Index
+- These are my Deep Learning Notes.
+  - Chapter 1, 2 are incomplete.
+  - Chapter 4 is mostly code.
+  - My Colab Code: https://colab.research.google.com/drive/1rcC20B-ydBOCUFb55hpajZS9gAPC2OAD?usp=sharing
+
+- [[./chapter_1.html]] [Not Good]
+- [[./chapter2.html]] [Not Good]
+- [[./chapter3.html]] - MLP
+- [[./chapter4.html]] [Full Code]
+- [[./chapter7.html]] - CNN
+- [[./chapter8.html]] - Modern CNN
