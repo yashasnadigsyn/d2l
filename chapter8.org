@@ -126,3 +126,4 @@
 ** Batch Normalization During Inference
 - *Difference from Training:* During inference, we don't have a batch of data to calculate statistics from. Instead, we use moving averages of the mean and variance that were computed during training.
 - *Moving Averages:* During training, we keep track of a running average of the batch means and variances. These moving averages are then used to normalize activations during inference. This makes the inference deterministic (the same input always gives the same output).
+** Batch Normalization Layers
