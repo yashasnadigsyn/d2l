@@ -1,0 +1,118 @@
+#+title: Chapter 8 - Modern CNN
+* AlexNet
+- AlexNet is an 8-layer convolutional neural network (CNN).
+
+  [[./images/modern_CNN_1.png]]
+
+- Left - LeNet, Right - AlexNet
+- Used MaxPool instead of AvgPool.
+- Used dropout techniques.
+- Used ReLU instead of Sigmoid.
+
+* VGG
+- AlexNet: Individual convolutional layers with varying kernel sizes.
+  - VGG: Introduced the concept of "VGG blocks" - a sequence of:
+    1. Multiple convolutional layers with same small (3x3) kernel and padding = 1 (to maintain resolution).
+    2. ReLU activation function.
+    3. Max-pooling layer (2x2 with stride 2) for downsampling (reducing resolution).
+
+[[./images/modern_CNN_2.png]]
+
+- Architecture:
+  - Deeper than AlexNet (e.g., VGG-11 has 11 layers: 8 convolutional, 3 fully connected).
+    - Uses only 3x3 convolutional kernels throughout the network.
+    - Convolutional layers are grouped into VGG blocks.
+    - Each VGG block followed by max-pooling (2x2, stride 2) that halves the spatial dimensions.
+    - Number of channels doubles after each block (e.g., 64, 128, 256, 512).
+    - The structure is modular. Can create deeper or shallower VGG networks by varying number of blocks and number of convolutions inside each block.
+* Network in Network
+- *Parameter Explosion*
+  - Fully connected layers in networks like AlexNet and VGG have a huge number of parameters.
+  - Example: VGG-11's fully connected layers require ~400MB of memory.
+  - Issues:
+    - Memory intensive: Hard to deploy on devices with limited memory (e.g., mobile phones).
+    - Computationally expensive: Slows down training and inference.
+
+- *Loss of Spatial Information*
+  - Using fully connected layers early in the network discards spatial relationships learned by convolutional layers.
+  - Analogy: Shuffling the pieces of a jigsaw puzzle destroys the image.
+
+- NiN's Solution: 1x1 Convolutions and Global Average Pooling
+  - *1x1 Convolutions*
+    - Applied after each regular convolution.
+    - Act as a fully connected layer *at each pixel location*.
+    - Introduce non-linearity across channels without affecting spatial structure.
+    - Analogy: A mini neural network at each pixel, learning relationships between feature maps.
+    - Benefits:
+      - Adds non-linearity.
+      - Increases representational power.
+      - Can reduce the number of channels (and parameters).
+
+  - *Global Average Pooling*
+    - Replaces the final fully connected layers.
+    - Computes the average of each feature map across all spatial locations.
+    - Produces a single value per feature map.
+    - Analogy: Summarizing a document by averaging the sentiment of each paragraph.
+    - Benefits:
+      - Drastically reduces parameter count (no large weight matrices).
+      - Adds robustness to spatial translations.
+
+[[./images/modern_CNN_3.png]]
+
+- NiN Blocks
+  - *Definition*
+    1. A convolutional layer (kernel size > 1x1, e.g., 3x3, 5x5, 11x11).
+    2. Two 1x1 convolutional layers (per-pixel "fully connected" layers).
+    3. ReLU activations after each convolutional layer.
+* Multi-Branch Networks (GoogLeNet)
+- GoogLeNet is a multi-branch CNN architecture.
+- It popularized the pattern of stem, body, and head in CNN design.
+  - Stem: The initial layers that process the raw input (e.g., the first few convolutional layers). Think of it as the part of the network that "ingests" the image and does initial processing.
+  - Body: The main part of the network, consisting of repeated blocks (in this case, Inception blocks) that extract increasingly complex features.
+  - Head: The final layers that take the features extracted by the body and make a prediction (e.g., classification, object detection).
+- Instead of trying to figure out the best size for convolution kernels (e.g., 3x3, 5x5), GoogLeNet used multiple kernel sizes in parallel and combined their outputs. This allowed it to capture features at different scales effectively.
+
+** Inception Block
+
+[[./images/modern_CNN_4.png]]
+
+- Four Parallel Branches: The Inception block has four paths that process the input simultaneously.
+
+** GoogLeNet Architecture
+
+[[./images/modern_CNN_5.png]]
+
+- Overall Structure: GoogLeNet is built by stacking multiple Inception blocks, with max-pooling layers in between to reduce the spatial dimensions.
+- Stem: Similar to earlier networks like AlexNet, it starts with a few convolutional layers to process the raw image.
+- Body: The core of the network, made up of nine Inception blocks organized into three groups. The number of channels and the ratios between branches in the Inception blocks are carefully chosen.
+- Head: A global average pooling layer reduces the spatial dimensions to 1x1, followed by a fully connected layer for classification.
+- Dimensionality Reduction: The max-pooling layers gradually reduce the height and width of the feature maps, while the number of channels increases. This is a common pattern in CNNs: trading spatial resolution for richer feature representations.
+
+* Batch Normalization
+** The Problem: Training Deep Networks is hard
+- *Vanishing/Exploding Gradients:* In very deep networks, gradients can become extremely small or large as they are backpropagated through many layers. This makes it hard for the optimization algorithm to update the weights effectively.
+- *Internal Covariate Shift:* The distribution of the activations (outputs of layers) can change significantly during training as the weights of earlier layers are updated. This means that each layer is constantly having to adapt to a new input distribution, slowing down learning.
+- *Sensitivity to Initialization:* Deep networks can be very sensitive to how the weights are initialized. Poor initialization can lead to slow convergence or getting stuck in bad local minima.
+- *Overfitting:* Deeper networks have more parameters, making them more prone to overfitting the training data and performing poorly on unseen data.
+** The Solution
+*** Part 1: Standardization (Preprocessing)
+- Transforms data to have zero mean and unit variance.
+- *How it's done (for each feature):*
+  - Calculate the mean (average) of the feature across all data points.
+  - Calculate the standard deviation (a measure of how spread out the data is) of the feature.
+  - For each data point, subtract the mean and divide by the standard deviation.
+- *Benefits:*
+  - *Improved Numerical Stability:* Keeps values in a reasonable range, preventing numerical issues during computation.
+  - *Faster Convergence:* Optimizers work better when features are on a similar scale.
+  - *Implicit Regularization:* Standardization can act as a form of regularization, reducing overfitting in some cases.
+*** Part 2: Batch Normalization (Training)
+- Batch Normalization extends the idea of standardization to the internal layers of a deep network. Instead of just standardizing the input data, it standardizes the activations of each layer during training.
+- *How it works (for each layer, during each training iteration):*
+  - *Calculate Batch Statistics:*
+    - Calculate the mean (μ_{B}) and variance (σ_{B}) of the activations within the current minibatch (a small subset of the training data).
+  - *Normalize:*
+    - Subtract the batch mean and divide by the batch standard deviation (plus a small constant ε for numerical stability). This centers the activations around 0 and scales them to have unit variance.
+      - x_normalized = (x - μ_{B}) / (σ_{B }^{}+ ε)
+  - *Scale and Shift:*
+    - Multiply the normalized activations by a learnable scale parameter (γ) and add a learnable shift parameter (β). This allows the network to learn the optimal mean and variance for each layer, rather than always forcing them to be 0 and 1. This step restores the representation power of the network.
+      - y = γ * x_normalized + β

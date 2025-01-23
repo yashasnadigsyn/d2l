@@ -1,1 +1,9 @@
-#+title: Chapter4
+#+title: Chapter4 - Builder's Guide
+
+* Layers and Modules
+- Main Idea: Neural networks, even complex ones like multi-layer perceptrons (MLPs), can be viewed as having a consistent structure: they take input, generate output, and have parameters that are adjusted during training. However, for complex architectures, the concept of "modules" (larger than a layer, smaller than the whole model) becomes crucial.
+- ResNet-152 has hundreds of layers, but these layers are organized into repeating patterns. Instead of coding each layer individually, you can define a "ResNet module" and reuse it multiple times, making the code much more concise and manageable.
+
+  [[./images/6_1_1.png]]
+
+- Like the above, we will build one module and add it one top of another to make a big deep neural network.
