@@ -1,4 +1,4 @@
-#+title: Chapter7 - CNN
+#+title: Chapter 7 - CNN
 
 * The problem with images for MLPs
 - Images are two dimensional grid of pixels. Each pixel corresponds to one or multiple numerical values (one - if image is monochromatic, multiple - if image is colored).

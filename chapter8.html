@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-01-23 Thu 16:08 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 8 - Modern CNN</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Chapter 8 - Modern CNN</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgaacbcb5">1. AlexNet</a></li>
+<li><a href="#orgb4fea32">2. VGG</a></li>
+<li><a href="#orgb0f1826">3. Network in Network</a></li>
+<li><a href="#orgc68522b">4. Multi-Branch Networks (GoogLeNet)</a>
+<ul>
+<li><a href="#org3c01678">4.1. Inception Block</a></li>
+<li><a href="#org61d8881">4.2. GoogLeNet Architecture</a></li>
+</ul>
+</li>
+<li><a href="#orgf565af3">5. Batch Normalization</a>
+<ul>
+<li><a href="#orgc877b4d">5.1. The Problem: Training Deep Networks is hard</a></li>
+<li><a href="#org1b92e24">5.2. The Solution</a>
+<ul>
+<li><a href="#org15da522">5.2.1. Part 1: Standardization (Preprocessing)</a></li>
+<li><a href="#org55cfc23">5.2.2. Part 2: Batch Normalization (Training)</a></li>
+</ul>
+</li>
+<li><a href="#org1e5688d">5.3. Batch Normalization During Inference</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgaacbcb5" class="outline-2">
+<h2 id="orgaacbcb5"><span class="section-number-2">1.</span> AlexNet</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li><p>
+AlexNet is an 8-layer convolutional neural network (CNN).
+</p>
+
+
+<div id="org2f58278" class="figure">
+<p><img src="./images/modern_CNN_1.png" alt="modern_CNN_1.png" />
+</p>
+</div></li>
+
+<li>Left - LeNet, Right - AlexNet</li>
+<li>Used MaxPool instead of AvgPool.</li>
+<li>Used dropout techniques.</li>
+<li>Used ReLU instead of Sigmoid.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb4fea32" class="outline-2">
+<h2 id="orgb4fea32"><span class="section-number-2">2.</span> VGG</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>AlexNet: Individual convolutional layers with varying kernel sizes.
+<ul class="org-ul">
+<li>VGG: Introduced the concept of &ldquo;VGG blocks&rdquo; - a sequence of:
+<ol class="org-ol">
+<li>Multiple convolutional layers with same small (3x3) kernel and padding = 1 (to maintain resolution).</li>
+<li>ReLU activation function.</li>
+<li>Max-pooling layer (2x2 with stride 2) for downsampling (reducing resolution).</li>
+</ol></li>
+</ul></li>
+</ul>
+
+
+<div id="org40fec16" class="figure">
+<p><img src="./images/modern_CNN_2.png" alt="modern_CNN_2.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>Architecture:
+<ul class="org-ul">
+<li>Deeper than AlexNet (e.g., VGG-11 has 11 layers: 8 convolutional, 3 fully connected).
+<ul class="org-ul">
+<li>Uses only 3x3 convolutional kernels throughout the network.</li>
+<li>Convolutional layers are grouped into VGG blocks.</li>
+<li>Each VGG block followed by max-pooling (2x2, stride 2) that halves the spatial dimensions.</li>
+<li>Number of channels doubles after each block (e.g., 64, 128, 256, 512).</li>
+<li>The structure is modular. Can create deeper or shallower VGG networks by varying number of blocks and number of convolutions inside each block.</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb0f1826" class="outline-2">
+<h2 id="orgb0f1826"><span class="section-number-2">3.</span> Network in Network</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li><b>Parameter Explosion</b>
+<ul class="org-ul">
+<li>Fully connected layers in networks like AlexNet and VGG have a huge number of parameters.</li>
+<li>Example: VGG-11&rsquo;s fully connected layers require ~400MB of memory.</li>
+<li>Issues:
+<ul class="org-ul">
+<li>Memory intensive: Hard to deploy on devices with limited memory (e.g., mobile phones).</li>
+<li>Computationally expensive: Slows down training and inference.</li>
+</ul></li>
+</ul></li>
+
+<li><b>Loss of Spatial Information</b>
+<ul class="org-ul">
+<li>Using fully connected layers early in the network discards spatial relationships learned by convolutional layers.</li>
+<li>Analogy: Shuffling the pieces of a jigsaw puzzle destroys the image.</li>
+</ul></li>
+
+<li>NiN&rsquo;s Solution: 1x1 Convolutions and Global Average Pooling
+<ul class="org-ul">
+<li><b>1x1 Convolutions</b>
+<ul class="org-ul">
+<li>Applied after each regular convolution.</li>
+<li>Act as a fully connected layer <b>at each pixel location</b>.</li>
+<li>Introduce non-linearity across channels without affecting spatial structure.</li>
+<li>Analogy: A mini neural network at each pixel, learning relationships between feature maps.</li>
+<li>Benefits:
+<ul class="org-ul">
+<li>Adds non-linearity.</li>
+<li>Increases representational power.</li>
+<li>Can reduce the number of channels (and parameters).</li>
+</ul></li>
+</ul></li>
+
+<li><b>Global Average Pooling</b>
+<ul class="org-ul">
+<li>Replaces the final fully connected layers.</li>
+<li>Computes the average of each feature map across all spatial locations.</li>
+<li>Produces a single value per feature map.</li>
+<li>Analogy: Summarizing a document by averaging the sentiment of each paragraph.</li>
+<li>Benefits:
+<ul class="org-ul">
+<li>Drastically reduces parameter count (no large weight matrices).</li>
+<li>Adds robustness to spatial translations.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+
+<div id="org420026b" class="figure">
+<p><img src="./images/modern_CNN_3.png" alt="modern_CNN_3.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>NiN Blocks
+<ul class="org-ul">
+<li><b>Definition</b>
+<ol class="org-ol">
+<li>A convolutional layer (kernel size &gt; 1x1, e.g., 3x3, 5x5, 11x11).</li>
+<li>Two 1x1 convolutional layers (per-pixel &ldquo;fully connected&rdquo; layers).</li>
+<li>ReLU activations after each convolutional layer.</li>
+</ol></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgc68522b" class="outline-2">
+<h2 id="orgc68522b"><span class="section-number-2">4.</span> Multi-Branch Networks (GoogLeNet)</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>GoogLeNet is a multi-branch CNN architecture.</li>
+<li>It popularized the pattern of stem, body, and head in CNN design.
+<ul class="org-ul">
+<li>Stem: The initial layers that process the raw input (e.g., the first few convolutional layers). Think of it as the part of the network that &ldquo;ingests&rdquo; the image and does initial processing.</li>
+<li>Body: The main part of the network, consisting of repeated blocks (in this case, Inception blocks) that extract increasingly complex features.</li>
+<li>Head: The final layers that take the features extracted by the body and make a prediction (e.g., classification, object detection).</li>
+</ul></li>
+<li>Instead of trying to figure out the best size for convolution kernels (e.g., 3x3, 5x5), GoogLeNet used multiple kernel sizes in parallel and combined their outputs. This allowed it to capture features at different scales effectively.</li>
+</ul>
+</div>
+<div id="outline-container-org3c01678" class="outline-3">
+<h3 id="org3c01678"><span class="section-number-3">4.1.</span> Inception Block</h3>
+<div class="outline-text-3" id="text-4-1">
+
+<div id="org014e204" class="figure">
+<p><img src="./images/modern_CNN_4.png" alt="modern_CNN_4.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>Four Parallel Branches: The Inception block has four paths that process the input simultaneously.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org61d8881" class="outline-3">
+<h3 id="org61d8881"><span class="section-number-3">4.2.</span> GoogLeNet Architecture</h3>
+<div class="outline-text-3" id="text-4-2">
+
+<div id="orga928efd" class="figure">
+<p><img src="./images/modern_CNN_5.png" alt="modern_CNN_5.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>Overall Structure: GoogLeNet is built by stacking multiple Inception blocks, with max-pooling layers in between to reduce the spatial dimensions.</li>
+<li>Stem: Similar to earlier networks like AlexNet, it starts with a few convolutional layers to process the raw image.</li>
+<li>Body: The core of the network, made up of nine Inception blocks organized into three groups. The number of channels and the ratios between branches in the Inception blocks are carefully chosen.</li>
+<li>Head: A global average pooling layer reduces the spatial dimensions to 1x1, followed by a fully connected layer for classification.</li>
+<li>Dimensionality Reduction: The max-pooling layers gradually reduce the height and width of the feature maps, while the number of channels increases. This is a common pattern in CNNs: trading spatial resolution for richer feature representations.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf565af3" class="outline-2">
+<h2 id="orgf565af3"><span class="section-number-2">5.</span> Batch Normalization</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-orgc877b4d" class="outline-3">
+<h3 id="orgc877b4d"><span class="section-number-3">5.1.</span> The Problem: Training Deep Networks is hard</h3>
+<div class="outline-text-3" id="text-5-1">
+<ul class="org-ul">
+<li><b>Vanishing/Exploding Gradients:</b> In very deep networks, gradients can become extremely small or large as they are backpropagated through many layers. This makes it hard for the optimization algorithm to update the weights effectively.</li>
+<li><b>Internal Covariate Shift:</b> The distribution of the activations (outputs of layers) can change significantly during training as the weights of earlier layers are updated. This means that each layer is constantly having to adapt to a new input distribution, slowing down learning.</li>
+<li><b>Sensitivity to Initialization:</b> Deep networks can be very sensitive to how the weights are initialized. Poor initialization can lead to slow convergence or getting stuck in bad local minima.</li>
+<li><b>Overfitting:</b> Deeper networks have more parameters, making them more prone to overfitting the training data and performing poorly on unseen data.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1b92e24" class="outline-3">
+<h3 id="org1b92e24"><span class="section-number-3">5.2.</span> The Solution</h3>
+<div class="outline-text-3" id="text-5-2">
+</div>
+<div id="outline-container-org15da522" class="outline-4">
+<h4 id="org15da522"><span class="section-number-4">5.2.1.</span> Part 1: Standardization (Preprocessing)</h4>
+<div class="outline-text-4" id="text-5-2-1">
+<ul class="org-ul">
+<li>Transforms data to have zero mean and unit variance.</li>
+<li><b>How it&rsquo;s done (for each feature):</b>
+<ul class="org-ul">
+<li>Calculate the mean (average) of the feature across all data points.</li>
+<li>Calculate the standard deviation (a measure of how spread out the data is) of the feature.</li>
+<li>For each data point, subtract the mean and divide by the standard deviation.</li>
+</ul></li>
+<li><b>Benefits:</b>
+<ul class="org-ul">
+<li><b>Improved Numerical Stability:</b> Keeps values in a reasonable range, preventing numerical issues during computation.</li>
+<li><b>Faster Convergence:</b> Optimizers work better when features are on a similar scale.</li>
+<li><b>Implicit Regularization:</b> Standardization can act as a form of regularization, reducing overfitting in some cases.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org55cfc23" class="outline-4">
+<h4 id="org55cfc23"><span class="section-number-4">5.2.2.</span> Part 2: Batch Normalization (Training)</h4>
+<div class="outline-text-4" id="text-5-2-2">
+<ul class="org-ul">
+<li>Batch Normalization extends the idea of standardization to the internal layers of a deep network. Instead of just standardizing the input data, it standardizes the activations of each layer during training.</li>
+<li><b>How it works (for each layer, during each training iteration):</b>
+<ul class="org-ul">
+<li><b>Calculate Batch Statistics:</b>
+<ul class="org-ul">
+<li>Calculate the mean (μ<sub>B</sub>) and variance (σ<sub>B</sub>) of the activations within the current minibatch (a small subset of the training data).</li>
+</ul></li>
+<li><b>Normalize:</b>
+<ul class="org-ul">
+<li>Subtract the batch mean and divide by the batch standard deviation (plus a small constant ε for numerical stability). This centers the activations around 0 and scales them to have unit variance.
+<ul class="org-ul">
+<li>x<sub>normalized</sub> = (x - μ<sub>B</sub>) / (σ<sub>B </sub><sup>nil</sup>+ ε)</li>
+</ul></li>
+</ul></li>
+<li><b>Scale and Shift:</b>
+<ul class="org-ul">
+<li>Multiply the normalized activations by a learnable scale parameter (γ) and add a learnable shift parameter (β). This allows the network to learn the optimal mean and variance for each layer, rather than always forcing them to be 0 and 1. This step restores the representation power of the network.
+<ul class="org-ul">
+<li>y = γ * x<sub>normalized</sub> + β</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><b>Why it&rsquo;s called &ldquo;Batch&rdquo; Normalization:</b> The statistics (mean and variance) are calculated over a batch of data, not the entire dataset.</li>
+<li>Equation: BN(x) = γ * (x - μ<sub>B</sub>) / (σ<sub>B</sub> + ε) + β</li>
+<li><b>Why it works</b>
+<ul class="org-ul">
+<li><b>Reduces Internal Covariate Shift:</b> By normalizing the activations, batch normalization stabilizes the distribution of inputs to each layer, making training faster and more stable.</li>
+<li><b>Allows Higher Learning Rates:</b> Batch normalization makes the optimization landscape smoother, allowing you to use larger learning rates without causing instability.</li>
+<li><b>Acts as Regularization:</b> The noise introduced by using batch statistics acts as a form of regularization, reducing overfitting. This is because each example within a batch is normalized based on the other examples in the batch, adding a small amount of variation.</li>
+<li><b>Makes Networks Less Sensitive to Initialization:</b> Batch normalization reduces the dependence on careful weight initialization.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org1e5688d" class="outline-3">
+<h3 id="org1e5688d"><span class="section-number-3">5.3.</span> Batch Normalization During Inference</h3>
+<div class="outline-text-3" id="text-5-3">
+<ul class="org-ul">
+<li><b>Difference from Training:</b> During inference, we don&rsquo;t have a batch of data to calculate statistics from. Instead, we use moving averages of the mean and variance that were computed during training.</li>
+<li><b>Moving Averages:</b> During training, we keep track of a running average of the batch means and variances. These moving averages are then used to normalize activations during inference. This makes the inference deterministic (the same input always gives the same output).</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2025-01-23 Thu 16:08</p>
+</div>
+</body>
+</html>

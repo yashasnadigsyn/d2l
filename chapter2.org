@@ -1,4 +1,4 @@
-#+title: Chapter2 - Linear Neural Networks for Classification
+#+title: Chapter 2 - Linear Neural Networks for Classification
 * Softmax Regression
 ** Classification Types
 *** Hard Assignments

@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-01-23 Thu 16:10 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 1</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Chapter 1</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org9d4cbc3">1. Generalization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ATTACH">ATTACH</span></span></a></li>
+<li><a href="#org9804aa2">2. Model Complexity</a>
+<ul>
+<li><a href="#org2bb128c">2.1. Example: Decision Trees vs Neural Network</a></li>
+<li><a href="#orga7f1582">2.2. Summary</a></li>
+</ul>
+</li>
+<li><a href="#org507bda9">3. Weight Decay</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org9d4cbc3" class="outline-2">
+<h2 id="org9d4cbc3"><span class="section-number-2">1.</span> Generalization&#xa0;&#xa0;&#xa0;<span class="tag"><span class="ATTACH">ATTACH</span></span></h2>
+<div class="outline-text-2" id="text-1">
+<p>
+In the standard supervised learning, we assume that the training and test data are drawn independently from identical distributions. This is commonly called <code>IID assumption</code>.
+</p>
+<ul class="org-ul">
+<li><code>Training error</code>: It is a statistic calculated on the training dataset.</li>
+<li><code>Generalization error</code>: It is an expectation taken with respect to the underlying distribution. (Or simply, the error that we get when
+we have large infinite amount of data and apply our model on it)</li>
+</ul>
+
+<p>
+The training error formula is: (summation)
+</p>
+
+
+<div id="org2f1ab6b" class="figure">
+<p><img src="file:///home/yashasnadigsyn/org/.attach/f4/23c5cb-1230-4bdb-870b-020525efb208/_20241009_143435screenshot.png" alt="_20241009_143435screenshot.png" />
+</p>
+</div>
+
+<p>
+The generalization error formula is: (integration)
+</p>
+
+
+<div id="orgc32bf43" class="figure">
+<p><img src="file:///home/yashasnadigsyn/org/.attach/f4/23c5cb-1230-4bdb-870b-020525efb208/_20241009_143543screenshot.png" alt="_20241009_143543screenshot.png" />
+</p>
+</div>
+
+<p>
+Consider the below paragraph:
+</p>
+<p class="verse">
+Crucially, when we evaluate our classifier on the test set, we are working with a fixed classifier (it does not depend on the sample<br />
+of the test set), and thus estimating its error is simply the problem of mean estimation. However the same cannot be said for the<br />
+training set. Note that the model we wind up with depends explicitly on the selection of the training set and thus the training<br />
+error will in general be a biased estimate of the true error on the underlying population. The central question of generalization<br />
+is then when should we expect our training error to be close to the population error (and thus the generalization error).<br />
+</p>
+<p>
+The above paragraph tells that the training error will always be biased and we can never get a generalization error. We can only randomly select a part from training set and use that as a test set.
+</p>
+</div>
+</div>
+<div id="outline-container-org9804aa2" class="outline-2">
+<h2 id="org9804aa2"><span class="section-number-2">2.</span> Model Complexity</h2>
+<div class="outline-text-2" id="text-2">
+<blockquote>
+<p>
+Karl Popper argued that a scientific theory should be falsifiable, meaning it should make predictions that can be tested and potentially proven wrong. If a theory can explain any and all observations, it&rsquo;s not a useful theory, as it hasn&rsquo;t ruled out any possibilities. In other words, a theory that can explain everything explains nothing.
+In machine learning, this idea translates to the concept of model complexity. A model that can fit arbitrary labels (i.e., explain any observation) is not useful, as it hasn&rsquo;t discovered any meaningful patterns. On the other hand, if a model is restricted in some way, so it can&rsquo;t fit arbitrary labels, and yet it still fits the training data, then it&rsquo;s likely discovered a genuine pattern.
+</p>
+</blockquote>
+<ul class="org-ul">
+<li>Fitting training data doesn&rsquo;t guarantee generalizability.</li>
+</ul>
+<p>
+Without restrictions on the model class, fitting the training data doesn&rsquo;t necessarily mean the model has learned generalizable patterns.
+Here, restrictions means assuming something. Example: assuming Gaussian error in linear regression.
+</p>
+<ul class="org-ul">
+<li>Model Complexity matters</li>
+</ul>
+<p>
+A model that&rsquo;s too complex can fit arbitrary labels, while a simpler model that still fits the data is more likely to have discovered meaningful patterns.
+</p>
+<ul class="org-ul">
+<li>Falsifiability</li>
+</ul>
+<p>
+A model should make predictions that can be tested and potentially proven wrong; otherwise, it&rsquo;s not a useful model.
+</p>
+
+<p>
+In short, we need a model that:
+</p>
+<ol class="org-ol">
+<li>Can&rsquo;t explain everything.</li>
+<li>Still matches our actual predictions.</li>
+</ol>
+
+<p>
+Model complexity cannot be just calculated by the number of parameters it has. It is complex to understand the model complexity.
+</p>
+</div>
+<div id="outline-container-org2bb128c" class="outline-3">
+<h3 id="org2bb128c"><span class="section-number-3">2.1.</span> Example: Decision Trees vs Neural Network</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Model 1: Decision Tree
+    Features: 10 (e.g., ear shape, tail length, fur color)
+    Depth: 5 levels
+    Leaf nodes: 50 (possible classifications)
+</p>
+
+<p>
+Model 2: Neural Network
+    Features: 1000 (e.g., pixel values)
+    Hidden layers: 5 with 20 neurons each
+    Weight range: -10 to 10
+</p>
+
+<p>
+Model 1 has high range of possible classifications (50) than neural network (20) and Model 1 is quite flexible too than Model 2.
+So, we cannot judge a Model&rsquo;s complexity just by the parameters.
+</p>
+</div>
+</div>
+<div id="outline-container-orga7f1582" class="outline-3">
+<h3 id="orga7f1582"><span class="section-number-3">2.2.</span> Summary</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>Use Cross-Validation for selecting a model.</li>
+<li>More complex models require more data. It is better to choose simple model when we have less data.</li>
+<li>A model&rsquo;s complexity depends both on the number of parameters and the range of parameters it has.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org507bda9" class="outline-2">
+<h2 id="org507bda9"><span class="section-number-2">3.</span> Weight Decay</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Weight Decay is a regularization technique to prevent overfitting in models by limiting the size of the model&rsquo;s parameters.
+Refer: /home/yashasnadigsyn/Documents/ISLP<sub>NEW</sub>/Chapter6.org for more details about regularization.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2025-01-23 Thu 16:10</p>
+</div>
+</body>
+</html>

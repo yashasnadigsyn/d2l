@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-01-23 Thu 16:11 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter3 - Multilayer Perceptrons</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Chapter3 - Multilayer Perceptrons</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org6a472d6">1. Multilayer Perceptrons</a>
+<ul>
+<li><a href="#org0e2ba47">1.1. Hidden Layers</a></li>
+<li><a href="#org3fed753">1.2. Linear to Non-Linear</a></li>
+<li><a href="#org0522f1e">1.3. Common Activation Functions</a>
+<ul>
+<li><a href="#orgd07385b">1.3.1. ReLU function</a></li>
+<li><a href="#orge28ab48">1.3.2. Sigmoid function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org50e32c8">2. Forward Propogation</a></li>
+<li><a href="#org1fd0a98">3. Back Propogation</a></li>
+<li><a href="#orgf6248c1">4. Training a Neural Network</a></li>
+<li><a href="#org8a3841d">5. Vanishing and Exploding Gradients</a>
+<ul>
+<li><a href="#orga00b5b8">5.1. Definition</a></li>
+<li><a href="#org4102736">5.2. Cause</a></li>
+<li><a href="#orgd479de1">5.3. Mathematical Illustration</a></li>
+<li><a href="#orgde4fdd2">5.4. Consequences</a></li>
+<li><a href="#org847c339">5.5. Mitigation</a></li>
+</ul>
+</li>
+<li><a href="#org009d523">6. Weight Initialization</a>
+<ul>
+<li><a href="#org3141a2c">6.1. Importance</a></li>
+<li><a href="#org967efbf">6.2. Goals</a></li>
+<li><a href="#org45541f0">6.3. Methods</a></li>
+<li><a href="#org561e565">6.4. Considerations</a></li>
+</ul>
+</li>
+<li><a href="#orgc61dc4c">7. Symmetry</a>
+<ul>
+<li><a href="#org79da0a0">7.1. Definition</a></li>
+<li><a href="#org1414a8e">7.2. Problem</a></li>
+<li><a href="#orgf33195f">7.3. Mathematical Explanation</a></li>
+<li><a href="#org5e29965">7.4. Solution</a></li>
+</ul>
+</li>
+<li><a href="#org1475d95">8. Generalization in Deep Learning</a>
+<ul>
+<li><a href="#org9b8a653">8.1. Key Idea: Deep learning generalization is complex and not fully understood, unlike simpler models.</a>
+<ul>
+<li><a href="#org88d73cb">8.1.1. Optimization vs. Generalization</a></li>
+<li><a href="#org6f14c4e">8.1.2. Overfitting and Regularization</a></li>
+<li><a href="#orged192b7">8.1.3. Deep Learning&rsquo;s Counterintuitive Behavior</a></li>
+<li><a href="#org2d1a045">8.1.4. Failure of Classical Learning Theory</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org24e154e">9. Deep Networks: Parametric or Nonparametric?</a>
+<ul>
+<li>
+<ul>
+<li><a href="#orgbc33355">9.0.1. Inspiration from Nonparametrics</a></li>
+<li><a href="#org997a186">9.0.2. k-Nearest Neighbors (k-NN) as Nonparametric Example</a></li>
+<li><a href="#org089a150">9.0.3. Deep Networks&rsquo; Nonparametric Behavior</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orga2ba958">10. Regularization Techniques for Deep Networks</a>
+<ul>
+<li>
+<ul>
+<li><a href="#org5a4315e">10.0.1. Early Stopping</a></li>
+<li><a href="#org34576c9">10.0.2. Classical Regularization (Weight Decay)</a></li>
+<li><a href="#org825e5c2">10.0.3. Dropout</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org0854119">11. Key Takeaways</a></li>
+<li><a href="#org0ce6560">12. Dropout</a>
+<ul>
+<li><a href="#orgde086a5">12.1. Core Idea**</a></li>
+<li><a href="#org3ce300a">12.2. Motivation**</a></li>
+<li><a href="#orgc48689d">12.3. How Dropout Works**</a></li>
+<li><a href="#org62af7c5">12.4. Effects of Dropout**</a></li>
+<li><a href="#org02afe6b">12.5. Dropout at Test Time**</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org6a472d6" class="outline-2">
+<h2 id="org6a472d6"><span class="section-number-2">1.</span> Multilayer Perceptrons</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org0e2ba47" class="outline-3">
+<h3 id="org0e2ba47"><span class="section-number-3">1.1.</span> Hidden Layers</h3>
+<div class="outline-text-3" id="text-1-1">
+
+<div id="org16fed4c" class="figure">
+<p><img src="./images/MLP.png" alt="MLP.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>The above architecture is called as multilayer perceptron, MLP. The above hidden layer has 5 hidden units.</li>
+<li>The number of layers in this MLP is <code>two</code>. We will ignore input layers as an actual layer.</li>
+
+<li>We will denote input dataset as a matrix X ∈ R<sup>nxd</sup> with n inputs and d features of every input.</li>
+<li>For a one hidden layer MLP with h hidden units, H ∈ R<sup>nxh</sup> and the outputs of hidden layer, are called <code>hidden representations</code>.</li>
+<li>Hidden layer weigths, W<sup>1</sup> ∈ R<sup>dxh</sup> and biases, b<sup>1</sup> ∈ R<sup>1xh</sup> and output layer weights W<sup>2</sup> ∈ R<sup>hxq</sup> and biases, b<sup>2</sup> ∈ R<sup>1xq</sup>.</li>
+<li><p>
+The outputs of one hidden layer MLP is O ∈ R<sup>nxq</sup>
+</p>
+
+<p>
+H = XW<sup>1</sup> + b<sup>1</sup>
+O = HW<sup>2</sup> + b<sup>2</sup>
+</p></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org3fed753" class="outline-3">
+<h3 id="org3fed753"><span class="section-number-3">1.2.</span> Linear to Non-Linear</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>The above H and O can be collapsed into one single layer and the MLP will be again linear. This is a problem because we need non-linear</li>
+</ul>
+<p>
+models to represent complex relationships.
+</p>
+<ul class="org-ul">
+<li>To solve this, we use a non-linear activation function which will be applied to every hidden unit.</li>
+<li>A popular choice is ReLU, 𝜎(x) = max(0,x).</li>
+<li><p>
+The output of the activation functions are called <code>activations</code>.
+</p>
+
+<p>
+H = 𝜎(XW<sup>1</sup> + b<sup>1)</sup>
+O = HW<sup>2</sup> + b<sup>2</sup>
+</p></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org0522f1e" class="outline-3">
+<h3 id="org0522f1e"><span class="section-number-3">1.3.</span> Common Activation Functions</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>Activation functions determine whether a neuron should &ldquo;fire&rdquo; or activate based on its input. They introduce non-linearity into the network.</li>
+</ul>
+</div>
+<div id="outline-container-orgd07385b" class="outline-4">
+<h4 id="orgd07385b"><span class="section-number-4">1.3.1.</span> ReLU function</h4>
+<div class="outline-text-4" id="text-1-3-1">
+
+<div id="org830ffa6" class="figure">
+<p><img src="./images/ReLU.png" alt="ReLU.png" width="400" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>Rectified Linear Unit</li>
+<li>ReLU(x) = max(0,x)</li>
+<li>Variants of ReLU:
+<ul class="org-ul">
+<li>Why do we need variants?
+<ul class="org-ul">
+<li>Dying ReLU problem: One potential issue with ReLU is the &ldquo;dying ReLU&rdquo; problem, where neurons can become permanently inactive if their input consistently becomes negative. This is because the gradient is zero for negative inputs, preventing any weight updates.</li>
+</ul></li>
+<li>pReLU(x) = max(0, x) + α min(0, x)</li>
+</ul></li>
+<li>The ReLU is non-differentiable at x=0, because there is a jump here. Practically, getting x as zero is very very low. Even if we get, we just assume derivative of ReLU at x=0 is 0.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orge28ab48" class="outline-4">
+<h4 id="orge28ab48"><span class="section-number-4">1.3.2.</span> Sigmoid function</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<ul class="org-ul">
+<li>It is also called <code>squashing function</code>.</li>
+<li>It transforms values from R to (0,1).</li>
+<li>(-inf,inf) -&gt; (0,1)</li>
+<li>sigmoid(x) = (1)/(1+e<sup>-</sup><sup>x</sup>)</li>
+</ul>
+
+
+<div id="org3042270" class="figure">
+<p><img src="./images/sigmoid.png" alt="sigmoid.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org50e32c8" class="outline-2">
+<h2 id="org50e32c8"><span class="section-number-2">2.</span> Forward Propogation</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>It refers to the calculation and storage of intermediate variables including outputs for a neural network in order from input to output layer.</li>
+<li>Let&rsquo;s assume a simple neural network with no bias term and one hidden layer.</li>
+<li>Input Layer (X) &#x2013;&gt; Hidden Layer (h) &#x2013;&gt; Output Layer (o)</li>
+<li>Step by Step breakdown:
+<ul class="org-ul">
+<li>z = W(1) * X =&gt; After, we get the input features from the input layer. We will multiply the input features by weights W(1) on the way to hidden layer (h). This is a linear transformation. If our input x has three features, (e.g., height, weight, age), and the hidden layer has 4 neurons. W(1) will be a 4x3 matrix. Each row of W(1) defines defines the weights for one neuron in the hidden layer.</li>
+<li>h = 𝜙(z) =&gt; After, we get z which in this example, is a 4x1 vector. We apply an activation function to the vector. This squishes the data space. For example, ReLU will make any negative number as zero.</li>
+<li>o = W(2) * h =&gt; We will again do linear transformation here. Since, in this example, h has 4 elements and output has 2 neurons, the W(2) matrix will be 2x4. The weights in W(2) determine how much each hidden neuron contributes to each output.</li>
+<li>L = l(o,y) =&gt; After, getting the output, we will compare it with the true label y.</li>
+<li>Regularization =&gt; Generally, instead of using just loss, we will add penalty to the loss called l2.
+J = L + s
+where,
+  L = l(o,y)
+  s = (λ/2) * (||W(1)||² + ||W(2)||²) -&gt; l2 norm</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1fd0a98" class="outline-2">
+<h2 id="org1fd0a98"><span class="section-number-2">3.</span> Back Propogation</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>It refers to the method of calculating the gradient of neural network parameters.</li>
+<li>Refer to page 181 on d2l.ai (It requires manual differentiation which is hard to write in emacs)</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgf6248c1" class="outline-2">
+<h2 id="orgf6248c1"><span class="section-number-2">4.</span> Training a Neural Network</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>Initialization
+<ul class="org-ul">
+<li>Start by initializing W(1) and W(2).</li>
+</ul></li>
+<li>Forward Propogation
+<ul class="org-ul">
+<li>z = W(1) * X</li>
+<li>h = phi(z)</li>
+<li>o = W(2) * h</li>
+<li>L = (o-y)<sup>2</sup></li>
+<li>J = L + s</li>
+</ul></li>
+<li>Backpropogation (again, refer the book for exactly how it came pg. 182)
+<ul class="org-ul">
+<li>dJ/do = 2(0-y)</li>
+<li>dJ/dW(2) = dJ/do * h + λW(2)</li>
+<li>dJ/dW(1) = dJ/dz * X + λW(1)</li>
+</ul></li>
+<li>Weight update
+<ul class="org-ul">
+<li>W(1) = W(1) - n * dJ/dW(1)</li>
+<li>W(2) = W(2) - n * dJ/dW(2)</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org8a3841d" class="outline-2">
+<h2 id="org8a3841d"><span class="section-number-2">5.</span> Vanishing and Exploding Gradients</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-orga00b5b8" class="outline-3">
+<h3 id="orga00b5b8"><span class="section-number-3">5.1.</span> Definition</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+These are problems encountered during the training of deep neural networks where gradients become either extremely small (vanishing) or extremely large (exploding) during backpropagation.
+</p>
+</div>
+</div>
+<div id="outline-container-org4102736" class="outline-3">
+<h3 id="org4102736"><span class="section-number-3">5.2.</span> Cause</h3>
+<div class="outline-text-3" id="text-5-2">
+<ul class="org-ul">
+<li><b>Chain Rule:</b> Backpropagation uses the chain rule to calculate gradients, involving the multiplication of many gradient terms across layers.</li>
+<li><b>Vanishing:</b> If these gradient terms are consistently less than 1 (e.g., due to the saturation of activation functions like sigmoid or tanh), their product can become exponentially small as it propagates through many layers. The derivative of the sigmoid function is at most 0.25. If this keeps on multiplying, it will vanish. <i>The provided example with the sigmoid activation function demonstrates this. The sigmoid&rsquo;s derivative (gradient) is close to zero when inputs are very large or very small. When used in a deep network, gradients can vanish quickly.</i></li>
+<li><b>Exploding:</b> If the gradient terms are consistently greater than 1 (e.g., due to large initial weights or the nature of certain activation functions in deep networks), their product can become exponentially large. If random matrix&rsquo;s values are high, there is a high chance that their multiplication will be high as well. <i>The provided Python code with matrix multiplication illustrates this. Initializing with random matrices and repeatedly multiplying them leads to extremely large values in the final matrix.</i></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgd479de1" class="outline-3">
+<h3 id="orgd479de1"><span class="section-number-3">5.3.</span> Mathematical Illustration</h3>
+<div class="outline-text-3" id="text-5-3">
+<ul class="org-ul">
+<li>Consider a network with L layers. The gradient of the loss with respect to the weights in an earlier layer <i>l</i> involves a product of terms:  ∂Loss/∂W(l) ∝ Π(i=l to L-1) ∂h(i+1)/∂h(i) * ∂h(l)/∂W(l)</li>
+<li>If ||∂h(i+1)/∂h(i)|| &lt; 1 for many <i>i</i>, the gradient will vanish.</li>
+<li>If ||∂h(i+1)/∂h(i)|| &gt; 1 for many <i>i</i>, the gradient will explode.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgde4fdd2" class="outline-3">
+<h3 id="orgde4fdd2"><span class="section-number-3">5.4.</span> Consequences</h3>
+<div class="outline-text-3" id="text-5-4">
+<ul class="org-ul">
+<li><b>Vanishing:</b>
+<ul class="org-ul">
+<li>Slow or stalled learning, especially in earlier layers.</li>
+<li>Weights in earlier layers may not update effectively.</li>
+</ul></li>
+<li><b>Exploding:</b>
+<ul class="org-ul">
+<li>Unstable training.</li>
+<li>Large weight updates, leading to oscillations or divergence.</li>
+<li>NaN or infinity values in weights.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org847c339" class="outline-3">
+<h3 id="org847c339"><span class="section-number-3">5.5.</span> Mitigation</h3>
+<div class="outline-text-3" id="text-5-5">
+<ul class="org-ul">
+<li>Proper weight initialization (see below).</li>
+<li>Gradient clipping (limiting the magnitude of gradients).</li>
+<li>Using activation functions less prone to saturation (e.g., ReLU).</li>
+<li>Batch normalization.</li>
+<li>LSTM or GRU architectures for recurrent networks.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org009d523" class="outline-2">
+<h2 id="org009d523"><span class="section-number-2">6.</span> Weight Initialization</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org3141a2c" class="outline-3">
+<h3 id="org3141a2c"><span class="section-number-3">6.1.</span> Importance</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+The initial values of weights significantly influence the training dynamics and convergence of neural networks.
+</p>
+</div>
+</div>
+<div id="outline-container-org967efbf" class="outline-3">
+<h3 id="org967efbf"><span class="section-number-3">6.2.</span> Goals</h3>
+<div class="outline-text-3" id="text-6-2">
+<ul class="org-ul">
+<li>Prevent vanishing or exploding gradients.</li>
+<li>Break symmetry (see below).</li>
+<li>Promote faster convergence.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org45541f0" class="outline-3">
+<h3 id="org45541f0"><span class="section-number-3">6.3.</span> Methods</h3>
+<div class="outline-text-3" id="text-6-3">
+<ul class="org-ul">
+<li><b>Random Initialization:</b> Weights are initialized with small random values, typically drawn from a Gaussian or uniform distribution.</li>
+<li><b>Xavier/Glorot Initialization:</b>
+<ul class="org-ul">
+<li><b>Rationale:</b> Scales the initial weights based on the number of input and output connections of a layer to maintain a similar variance of activations and gradients across layers.</li>
+<li><b>Formula (Gaussian):</b> Weights are drawn from a Gaussian distribution with mean 0 and variance σ² = 2 / (n<sub>in</sub> + n<sub>out</sub>), where n<sub>in</sub> is the number of input units and n<sub>out</sub> is the number of output units.</li>
+<li><b>Formula (Uniform):</b> Weights are drawn from a uniform distribution in the range [-√(6 / (n<sub>in</sub> + n<sub>out</sub>)), √(6 / (n<sub>in</sub> + n<sub>out</sub>))].</li>
+</ul></li>
+<li><b>He Initialization:</b>
+<ul class="org-ul">
+<li><b>Rationale:</b> Similar to Xavier but specifically designed for ReLU activation functions.</li>
+<li><b>Formula (Gaussian):</b> Variance σ² = 2 / n<sub>in</sub></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org561e565" class="outline-3">
+<h3 id="org561e565"><span class="section-number-3">6.4.</span> Considerations</h3>
+<div class="outline-text-3" id="text-6-4">
+<ul class="org-ul">
+<li>The choice of initialization method may depend on the activation function used.</li>
+<li>Other specialized initialization techniques exist for different network architectures.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgc61dc4c" class="outline-2">
+<h2 id="orgc61dc4c"><span class="section-number-2">7.</span> Symmetry</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-org79da0a0" class="outline-3">
+<h3 id="org79da0a0"><span class="section-number-3">7.1.</span> Definition</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+In the context of neural networks, symmetry refers to a situation where multiple neurons in a layer have identical weights and biases.
+</p>
+</div>
+</div>
+<div id="outline-container-org1414a8e" class="outline-3">
+<h3 id="org1414a8e"><span class="section-number-3">7.2.</span> Problem</h3>
+<div class="outline-text-3" id="text-7-2">
+<ul class="org-ul">
+<li><b>Redundancy:</b> Symmetric neurons compute the same output and have identical gradients during backpropagation.</li>
+<li><b>Limited Expressive Power:</b> The network effectively behaves as if it has fewer neurons, as those with identical weights do not learn unique features.</li>
+<li><b>Inability to Learn:</b> Gradient-based optimization methods may fail to break this symmetry, preventing the network from learning effectively.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgf33195f" class="outline-3">
+<h3 id="orgf33195f"><span class="section-number-3">7.3.</span> Mathematical Explanation</h3>
+<div class="outline-text-3" id="text-7-3">
+<ul class="org-ul">
+<li>Consider two neurons <i>i</i> and <i>j</i> in a layer with identical weights (W<sub>i</sub> = W<sub>j</sub>) and biases (b<sub>i</sub> = b<sub>j</sub>).</li>
+<li>Their outputs will be the same for any input: o<sub>i</sub> = o<sub>j</sub>.</li>
+<li>During backpropagation, their gradients will also be identical: ∂Loss/∂W<sub>i</sub> = ∂Loss/∂W<sub>j</sub>.</li>
+<li>Consequently, their weights will be updated identically in each iteration, maintaining the symmetry.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org5e29965" class="outline-3">
+<h3 id="org5e29965"><span class="section-number-3">7.4.</span> Solution</h3>
+<div class="outline-text-3" id="text-7-4">
+<ul class="org-ul">
+<li><b>Random Initialization:</b> Initializing weights with small random values breaks the symmetry, ensuring that each neuron starts in a different state and learns distinct features.</li>
+<li><b>Dropout:</b> Although not directly related to initialization, dropout can further help break symmetry during training by randomly deactivating neurons in each iteration.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org1475d95" class="outline-2">
+<h2 id="org1475d95"><span class="section-number-2">8.</span> Generalization in Deep Learning</h2>
+<div class="outline-text-2" id="text-8">
+</div>
+<div id="outline-container-org9b8a653" class="outline-3">
+<h3 id="org9b8a653"><span class="section-number-3">8.1.</span> Key Idea: Deep learning generalization is complex and not fully understood, unlike simpler models.</h3>
+<div class="outline-text-3" id="text-8-1">
+</div>
+<div id="outline-container-org88d73cb" class="outline-4">
+<h4 id="org88d73cb"><span class="section-number-4">8.1.1.</span> Optimization vs. Generalization</h4>
+<div class="outline-text-4" id="text-8-1-1">
+<ul class="org-ul">
+<li>Goal of ML is <b>generalization</b>: perform well on unseen data.</li>
+<li>Optimization helps fit training data, but generalization is the real challenge.</li>
+<li>Deep learning&rsquo;s generalization ability is still not fully explained theoretically.</li>
+<li>In practice, generalization is the primary focus as models often fit training data perfectly.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org6f14c4e" class="outline-4">
+<h4 id="org6f14c4e"><span class="section-number-4">8.1.2.</span> Overfitting and Regularization</h4>
+<div class="outline-text-4" id="text-8-1-2">
+<ul class="org-ul">
+<li><b>No Free Lunch Theorem</b>: No single learning algorithm is universally superior; performance depends on data distribution.</li>
+<li><b>Inductive Biases</b>: Models have inherent preferences for certain solutions based on their design (e.g., MLPs favor compositions of functions).</li>
+<li><b>Generalization Gap</b>: Difference in performance between training and test data. Large gap = overfitting.</li>
+<li><b>Classical Overfitting View</b>: Overfitting due to model complexity; solutions involve reducing features/parameters or limiting parameter size.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orged192b7" class="outline-4">
+<h4 id="orged192b7"><span class="section-number-4">8.1.3.</span> Deep Learning&rsquo;s Counterintuitive Behavior</h4>
+<div class="outline-text-4" id="text-8-1-3">
+<ul class="org-ul">
+<li>Deep models often achieve <b>zero training error</b> even on large datasets.</li>
+<li>All models can overfit initially.</li>
+<li>Increasing model <b>expressiveness</b> (e.g., adding layers) can sometimes <b>reduce</b> overfitting.</li>
+<li><b>Double Descent</b>: Model complexity vs. generalization can be non-monotonic (hurt, help, hurt again).</li>
+<li>Practitioners use various techniques (regularization, architectural choices) to combat overfitting.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org2d1a045" class="outline-4">
+<h4 id="org2d1a045"><span class="section-number-4">8.1.4.</span> Failure of Classical Learning Theory</h4>
+<div class="outline-text-4" id="text-8-1-4">
+<ul class="org-ul">
+<li>Traditional complexity measures (VC dimension, Rademacher complexity) fail to explain deep network generalization.</li>
+<li>These models can fit arbitrary labels, making classical theories inadequate.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org24e154e" class="outline-2">
+<h2 id="org24e154e"><span class="section-number-2">9.</span> Deep Networks: Parametric or Nonparametric?</h2>
+<div class="outline-text-2" id="text-9">
+</div>
+<div id="outline-container-orgbc33355" class="outline-4">
+<h4 id="orgbc33355"><span class="section-number-4">9.0.1.</span> Inspiration from Nonparametrics</h4>
+<div class="outline-text-4" id="text-9-0-1">
+<ul class="org-ul">
+<li>Deep networks, despite having many parameters, often behave like <b>nonparametric</b> models.</li>
+<li>Nonparametric models&rsquo; complexity grows with the amount of data.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org997a186" class="outline-4">
+<h4 id="org997a186"><span class="section-number-4">9.0.2.</span> k-Nearest Neighbors (k-NN) as Nonparametric Example</h4>
+<div class="outline-text-4" id="text-9-0-2">
+<ul class="org-ul">
+<li><b>Training</b>: Memorizes the entire training dataset.</li>
+<li><b>Prediction</b>: Finds &rsquo;k&rsquo; nearest neighbors in training data for a new input.</li>
+<li><b>Complexity</b>: Grows with more training data.</li>
+<li><b>1-NN</b>: Achieves zero training error but can still generalize (be &ldquo;consistent&rdquo;).</li>
+<li><b>Distance Function</b>: Crucial choice; different functions encode different assumptions, leading to different predictions.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org089a150" class="outline-4">
+<h4 id="org089a150"><span class="section-number-4">9.0.3.</span> Deep Networks&rsquo; Nonparametric Behavior</h4>
+<div class="outline-text-4" id="text-9-0-3">
+<ul class="org-ul">
+<li><b>Over-parameterization</b>: More parameters than needed to memorize training data.</li>
+<li><b>Interpolation</b>: Can fit training data perfectly, like 1-NN.</li>
+<li><b>Neural Tangent Kernel</b>: Research shows a link between wide, randomly initialized networks and kernel methods (nonparametric).</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orga2ba958" class="outline-2">
+<h2 id="orga2ba958"><span class="section-number-2">10.</span> Regularization Techniques for Deep Networks</h2>
+<div class="outline-text-2" id="text-10">
+</div>
+<div id="outline-container-org5a4315e" class="outline-4">
+<h4 id="org5a4315e"><span class="section-number-4">10.0.1.</span> Early Stopping</h4>
+<div class="outline-text-4" id="text-10-0-1">
+<ul class="org-ul">
+<li>Halt training before perfect memorization of training data, especially with noisy labels.</li>
+<li><b>Motivation</b>:
+<ul class="org-ul">
+<li>Networks fit clean data before noisy data.</li>
+<li>Stopping early can improve generalization.</li>
+<li>Saves time and resources.</li>
+</ul></li>
+<li><b>How it works</b>:
+<ul class="org-ul">
+<li>Monitor validation error.</li>
+<li>Stop when validation error stops improving (using a &ldquo;patience&rdquo; criterion).</li>
+</ul></li>
+<li><b>When useful</b>:
+<ul class="org-ul">
+<li>Noisy or inherently variable labels.</li>
+<li>Less benefit with perfectly separable, noiseless data.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org34576c9" class="outline-4">
+<h4 id="org34576c9"><span class="section-number-4">10.0.2.</span> Classical Regularization (Weight Decay)</h4>
+<div class="outline-text-4" id="text-10-0-2">
+<ul class="org-ul">
+<li>Penalize large weights (L1/L2 regularization) to prevent overfitting.</li>
+<li><b>Limited effectiveness alone</b>: Often not enough to prevent memorization in deep learning.</li>
+<li><b>Combined with early stopping</b>: May guide the model towards a good solution early in training.</li>
+<li><b>Inductive biases</b>: Might work by introducing beneficial biases rather than strictly limiting capacity.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org825e5c2" class="outline-4">
+<h4 id="org825e5c2"><span class="section-number-4">10.0.3.</span> Dropout</h4>
+<div class="outline-text-4" id="text-10-0-3">
+<ul class="org-ul">
+<li>Randomly disable neurons during training.</li>
+<li>Prevents reliance on single neurons.</li>
+<li>Another popular regularization technique in deep learning.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org0854119" class="outline-2">
+<h2 id="org0854119"><span class="section-number-2">11.</span> Key Takeaways</h2>
+<div class="outline-text-2" id="text-11">
+<ul class="org-ul">
+<li>Deep learning generalization is a complex and active research area.</li>
+<li>Classical overfitting concepts don&rsquo;t fully apply.</li>
+<li>Nonparametric perspective might offer a better framework for understanding.</li>
+<li>Early stopping is crucial, especially with noisy data.</li>
+<li>Classical regularization is used differently and often combined with early stopping.</li>
+<li>Effectiveness might be due to inductive biases rather than capacity limits.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org0ce6560" class="outline-2">
+<h2 id="org0ce6560"><span class="section-number-2">12.</span> Dropout</h2>
+<div class="outline-text-2" id="text-12">
+</div>
+<div id="outline-container-orgde086a5" class="outline-3">
+<h3 id="orgde086a5"><span class="section-number-3">12.1.</span> Core Idea**</h3>
+<div class="outline-text-3" id="text-12-1">
+<ul class="org-ul">
+<li>Dropout is a regularization technique to prevent overfitting in neural networks.</li>
+<li>It works by randomly &ldquo;dropping out&rdquo; (zeroing) a fraction of neurons in a layer during each training iteration.</li>
+<li>This forces the network to learn more robust features that are not overly dependent on any single neuron.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org3ce300a" class="outline-3">
+<h3 id="org3ce300a"><span class="section-number-3">12.2.</span> Motivation**</h3>
+<div class="outline-text-3" id="text-12-2">
+<ul class="org-ul">
+<li>We want models that generalize well to unseen data (good test performance).</li>
+<li>Classical generalization theory suggests simpler models generalize better.</li>
+<li>Simplicity can be achieved through:
+<ul class="org-ul">
+<li>Fewer dimensions (e.g., lower-order polynomial basis functions in linear models).</li>
+<li>Smaller parameter norms (e.g., L2 regularization/weight decay).</li>
+<li>Smoothness: The function shouldn&rsquo;t be overly sensitive to small input changes.</li>
+</ul></li>
+<li>Bishop (1995) showed that training with input noise is equivalent to Tikhonov regularization, linking smoothness and resilience to input perturbations.</li>
+<li>Srivastava et al. (2014) extended this idea to internal layers of a network using dropout.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgc48689d" class="outline-3">
+<h3 id="orgc48689d"><span class="section-number-3">12.3.</span> How Dropout Works**</h3>
+<div class="outline-text-3" id="text-12-3">
+<ul class="org-ul">
+<li>During each training iteration:
+<ol class="org-ol">
+<li>Select a random subset of neurons in a layer to &ldquo;drop out&rdquo; (set their activation to 0).</li>
+<li>Calculate the next layer&rsquo;s activations based on the remaining neurons.</li>
+<li>Scale the activations of the remaining neurons to compensate for the dropped ones. (keep expectation the same)</li>
+</ol></li>
+<li>Dropout probability (p): The probability that a neuron is dropped out.
+<ul class="org-ul">
+<li><p>
+Equation (5.6.1):
+</p>
+<div class="org-src-container">
+<pre class="src src-nil">        h' = { 0 with probability p
+             { h / (1-p) otherwise
+</pre>
+</div></li>
+<li>This maintains the expected value of the activation: E[h&rsquo;] = h.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org62af7c5" class="outline-3">
+<h3 id="org62af7c5"><span class="section-number-3">12.4.</span> Effects of Dropout**</h3>
+<div class="outline-text-3" id="text-12-4">
+<ul class="org-ul">
+<li>Prevents co-adaptation: Layers don&rsquo;t become overly reliant on specific patterns of activations in the previous layer.</li>
+<li>Gradient vanishes for dropped neurons during backpropagation.</li>
+<li>Effectively trains an ensemble of networks with different subsets of neurons.</li>
+<li>Output layer cannot depend too much on any single hidden unit.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org02afe6b" class="outline-3">
+<h3 id="org02afe6b"><span class="section-number-3">12.5.</span> Dropout at Test Time**</h3>
+<div class="outline-text-3" id="text-12-5">
+<ul class="org-ul">
+<li>Typically <b>disabled</b> during testing.</li>
+<li>No neurons are dropped, and no scaling is needed.</li>
+<li>Exception: Can be used as a heuristic for estimating prediction uncertainty.
+<ul class="org-ul">
+<li>Agreement across multiple dropout masks suggests higher confidence.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2025-01-23 Thu 16:11</p>
+</div>
+</body>
+</html>

@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-14 Tue 20:45 -->
+<!-- 2025-01-23 Thu 16:09 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Chapter7 - CNN</title>
+<title>Chapter 7 - CNN</title>
 <meta name="generator" content="Org Mode" />
 <style type="text/css">
   #content { max-width: 60em; margin: auto; }
@@ -195,25 +195,26 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Chapter7 - CNN</h1>
+<h1 class="title">Chapter 7 - CNN</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgf83e3a0">1. The problem with images for MLPs</a></li>
-<li><a href="#orgb8c7e1f">2. From Fully Connected Layers to Convolutions</a></li>
-<li><a href="#org7ea2831">3. Invariance</a></li>
-<li><a href="#org5a80393">4. Constraining the MLP</a></li>
-<li><a href="#orgeb4c5ed">5. Translation Invariance, Locality, Convolutions, Channels</a></li>
-<li><a href="#orge13729a">6. Cross-Correlation and Convolution</a></li>
-<li><a href="#orgd94f874">7. Feature Map and Receptive Field</a></li>
-<li><a href="#orgf79f250">8. Padding and Stride</a></li>
-<li><a href="#org8652115">9. Multiple Input and Multiple Output Channels</a></li>
+<li><a href="#org5a16f03">1. The problem with images for MLPs</a></li>
+<li><a href="#orgdc69508">2. From Fully Connected Layers to Convolutions</a></li>
+<li><a href="#orge6cbeb1">3. Invariance</a></li>
+<li><a href="#org84bbd69">4. Constraining the MLP</a></li>
+<li><a href="#orgad86810">5. Translation Invariance, Locality, Convolutions, Channels</a></li>
+<li><a href="#org0e27643">6. Cross-Correlation and Convolution</a></li>
+<li><a href="#org940fedd">7. Feature Map and Receptive Field</a></li>
+<li><a href="#org95854ce">8. Padding and Stride</a></li>
+<li><a href="#org4e2af19">9. Multiple Input and Multiple Output Channels</a></li>
+<li><a href="#org0a1204b">10. Pooling</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgf83e3a0" class="outline-2">
-<h2 id="orgf83e3a0"><span class="section-number-2">1.</span> The problem with images for MLPs</h2>
+<div id="outline-container-org5a16f03" class="outline-2">
+<h2 id="org5a16f03"><span class="section-number-2">1.</span> The problem with images for MLPs</h2>
 <div class="outline-text-2" id="text-1">
 <ul class="org-ul">
 <li>Images are two dimensional grid of pixels. Each pixel corresponds to one or multiple numerical values (one - if image is monochromatic, multiple - if image is colored).</li>
@@ -222,8 +223,8 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb8c7e1f" class="outline-2">
-<h2 id="orgb8c7e1f"><span class="section-number-2">2.</span> From Fully Connected Layers to Convolutions</h2>
+<div id="outline-container-orgdc69508" class="outline-2">
+<h2 id="orgdc69508"><span class="section-number-2">2.</span> From Fully Connected Layers to Convolutions</h2>
 <div class="outline-text-2" id="text-2">
 <ul class="org-ul">
 <li>The main point is that while fully connected layers (used in MLPs) are suitable for tabular data, they become impractical and inefficient when dealing with high-dimensional data like images. CNNs, on the other hand, are designed to exploit the inherent structure in images, making them much better suited for image-related tasks.</li>
@@ -233,8 +234,8 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org7ea2831" class="outline-2">
-<h2 id="org7ea2831"><span class="section-number-2">3.</span> Invariance</h2>
+<div id="outline-container-orge6cbeb1" class="outline-2">
+<h2 id="orge6cbeb1"><span class="section-number-2">3.</span> Invariance</h2>
 <div class="outline-text-2" id="text-3">
 <ul class="org-ul">
 <li>The core idea is that a good object detection system should be able to recognize an object regardless of its location in the image. This property is called translation invariance. CNNs are designed with this principle in mind, along with the principle of locality, to learn efficient and effective representations for images.</li>
@@ -245,7 +246,7 @@ We could sweep the image with a Waldo detector that could assign a score to each
 </p>
 
 
-<div id="org4ae6892" class="figure">
+<div id="org8df9726" class="figure">
 <p><img src="./images/CNN_1.png" alt="CNN_1.png" />
 </p>
 </div></li>
@@ -269,8 +270,8 @@ We could sweep the image with a Waldo detector that could assign a score to each
 </ul>
 </div>
 </div>
-<div id="outline-container-org5a80393" class="outline-2">
-<h2 id="org5a80393"><span class="section-number-2">4.</span> Constraining the MLP</h2>
+<div id="outline-container-org84bbd69" class="outline-2">
+<h2 id="org84bbd69"><span class="section-number-2">4.</span> Constraining the MLP</h2>
 <div class="outline-text-2" id="text-4">
 <ul class="org-ul">
 <li>The core idea is to represent both the input image and the hidden representation as two-dimensional matrices (or tensors) to reflect their spatial structure. Then, it introduces a fourth-order weight tensor to connect these two, suggesting a move towards localized connections. However, even with this change, the number of parameters remains astronomically high for fully connected networks.</li>
@@ -281,7 +282,7 @@ We could sweep the image with a Waldo detector that could assign a score to each
 </ul>
 
 
-<div id="org7b231c3" class="figure">
+<div id="orgc348bb9" class="figure">
 <p><img src="./images/CNN_2.png" alt="CNN_2.png" />
 </p>
 </div>
@@ -292,7 +293,7 @@ We could sweep the image with a Waldo detector that could assign a score to each
 </ul>
 
 
-<div id="org9ac8196" class="figure">
+<div id="orgf842e67" class="figure">
 <p><img src="./images/CNN_3.png" alt="CNN_3.png" />
 </p>
 </div>
@@ -321,8 +322,8 @@ We could sweep the image with a Waldo detector that could assign a score to each
 </ul>
 </div>
 </div>
-<div id="outline-container-orgeb4c5ed" class="outline-2">
-<h2 id="orgeb4c5ed"><span class="section-number-2">5.</span> Translation Invariance, Locality, Convolutions, Channels</h2>
+<div id="outline-container-orgad86810" class="outline-2">
+<h2 id="orgad86810"><span class="section-number-2">5.</span> Translation Invariance, Locality, Convolutions, Channels</h2>
 <div class="outline-text-2" id="text-5">
 <ul class="org-ul">
 <li>By applying the principles of translation invariance and locality, the initial, overly complex formulation of the MLP is transformed into a convolutional layer. This significantly reduces the number of parameters and makes the model more suitable for image data. The section then extends this to handle multiple channels, paving the way for processing color images and learning more complex features.</li>
@@ -350,8 +351,8 @@ We could sweep the image with a Waldo detector that could assign a score to each
 </ul>
 </div>
 </div>
-<div id="outline-container-orge13729a" class="outline-2">
-<h2 id="orge13729a"><span class="section-number-2">6.</span> Cross-Correlation and Convolution</h2>
+<div id="outline-container-org0e27643" class="outline-2">
+<h2 id="org0e27643"><span class="section-number-2">6.</span> Cross-Correlation and Convolution</h2>
 <div class="outline-text-2" id="text-6">
 <ul class="org-ul">
 <li>The main point is that while there&rsquo;s a mathematical difference between cross-correlation and convolution (involving flipping the kernel), in deep learning, convolutional layers often perform cross-correlation but are still referred to as &ldquo;convolutions.&rdquo; This is because the learned kernels effectively adapt to whichever operation is used, resulting in the same output regardless.</li>
@@ -359,11 +360,11 @@ We could sweep the image with a Waldo detector that could assign a score to each
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd94f874" class="outline-2">
-<h2 id="orgd94f874"><span class="section-number-2">7.</span> Feature Map and Receptive Field</h2>
+<div id="outline-container-org940fedd" class="outline-2">
+<h2 id="org940fedd"><span class="section-number-2">7.</span> Feature Map and Receptive Field</h2>
 <div class="outline-text-2" id="text-7">
 
-<div id="org8684a13" class="figure">
+<div id="orgee6ca34" class="figure">
 <p><img src="./images/CNN_8.png" alt="CNN_8.png" />
 </p>
 </div>
@@ -377,8 +378,8 @@ We could sweep the image with a Waldo detector that could assign a score to each
 </ul>
 </div>
 </div>
-<div id="outline-container-orgf79f250" class="outline-2">
-<h2 id="orgf79f250"><span class="section-number-2">8.</span> Padding and Stride</h2>
+<div id="outline-container-org95854ce" class="outline-2">
+<h2 id="org95854ce"><span class="section-number-2">8.</span> Padding and Stride</h2>
 <div class="outline-text-2" id="text-8">
 <ul class="org-ul">
 <li><b>Padding</b> adds extra pixels (usually with a value of 0) around the borders of the input image to prevent the output from shrinking too much after convolutions, especially when multiple layers are stacked.</li>
@@ -390,7 +391,7 @@ Often, padding is set to ph = kh - 1 and pw = kw - 1 to maintain the same input 
 </p>
 
 
-<div id="org14064a1" class="figure">
+<div id="org0676873" class="figure">
 <p><img src="./images/CNN_9.png" alt="CNN_9.png" />
 </p>
 </div></li>
@@ -406,7 +407,7 @@ Output Shape = ⌊(nh - kh + ph + sh) / sh⌋ × ⌊(nw - kw + pw + sw) / sw⌋
 </p>
 
 
-<div id="orge2633f6" class="figure">
+<div id="orgd803967" class="figure">
 <p><img src="./images/CNN_10.png" alt="CNN_10.png" />
 </p>
 </div></li>
@@ -451,17 +452,72 @@ Output Shape = ⌊(nh - kh + ph + sh) / sh⌋ × ⌊(nw - kw + pw + sw) / sw⌋
 </table>
 </div>
 </div>
-<div id="outline-container-org8652115" class="outline-2">
-<h2 id="org8652115"><span class="section-number-2">9.</span> Multiple Input and Multiple Output Channels</h2>
+<div id="outline-container-org4e2af19" class="outline-2">
+<h2 id="org4e2af19"><span class="section-number-2">9.</span> Multiple Input and Multiple Output Channels</h2>
 <div class="outline-text-2" id="text-9">
 <ul class="org-ul">
-<li>Hi</li>
+<li><b>Multiple Input Channels:</b> CNNs handle multiple input channels (like the RGB channels of a color image) by using a kernel with the same number of channels as the input. The convolution is performed separately on each channel, and the results are summed to produce a single output channel.</li>
+<li>When dealing with multi-channel input data (e.g., color images), each channel represents a different aspect of the data (e.g., red, green, blue intensities).</li>
+<li><p>
+To handle ci input channels, the convolution kernel also needs to have ci channels. The kernel&rsquo;s shape becomes ci × kh × kw.
+</p>
+
+
+<div id="org7711c0b" class="figure">
+<p><img src="./images/CNN_11.png" alt="CNN_11.png" />
+</p>
+</div></li>
+
+<li><b>Multiple Output Channels:</b> To get multiple output channels, a CNN uses multiple kernels, each producing one output channel. These kernels are stacked together to form a tensor with dimensions (output<sub>channels</sub>, input<sub>channels</sub>, kernel<sub>height</sub>, kernel<sub>width</sub>).</li>
+<li>Using multiple output channels allows the network to learn different features from the input. Each output channel can specialize in detecting a particular pattern or aspect of the data.</li>
+<li>To create co output channels, we use co different kernels. Each kernel has the shape ci × kh × kw (to handle the ci input channels).</li>
+<li>These co kernels are stacked together along a new dimension (the output channel dimension), resulting in a kernel tensor with shape co × ci × kh × kw.</li>
+<li>In practice, CNN architectures often increase the number of channels as you go deeper into the network. This allows the network to learn increasingly complex and abstract features while simultaneously reducing the spatial resolution (using techniques like pooling or strides).</li>
+
+<li><b>1x1 Convolutions:</b> These use a kernel size of 1x1 and act as a fully connected layer applied to each pixel across all channels. They are used to change the number of channels and to learn complex combinations of features across channels.</li>
+<li>At first glance, a 1x1 convolution seems pointless because it doesn&rsquo;t consider interactions between neighboring pixels in the spatial dimensions.</li>
+<li>A 1x1 convolution operates solely on the channel dimension. For each spatial location (pixel), it takes the ci input values across all channels and computes a weighted sum of those values to produce co output values.</li>
+<li><p>
+You can think of a 1x1 convolution as applying a fully connected layer to each pixel individually, where the weights are shared across all pixels. The number of weights is co × ci (plus biases).
+</p>
+
+
+<div id="orgd5a74a2" class="figure">
+<p><img src="./images/CNN_12.png" alt="CNN_12.png" />
+</p>
+</div></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org0a1204b" class="outline-2">
+<h2 id="org0a1204b"><span class="section-number-2">10.</span> Pooling</h2>
+<div class="outline-text-2" id="text-10">
+<ul class="org-ul">
+<li>Pooling layers reduce the spatial dimensions of feature maps, providing a form of downsampling and making the network more robust to small translations in the input. They operate by sliding a window over the input and computing a summary statistic (maximum or average) of the values within the window.</li>
+<li>Pooling makes the network less sensitive to the precise location of features. A small shift in the input is less likely to change the output of the pooling layer significantly, especially with max-pooling.</li>
+<li>Pooling reduces the spatial resolution of the feature maps, which decreases the computational cost and the number of parameters in subsequent layers. It also increases the receptive field of deeper layers.</li>
+<li>By progressively reducing spatial dimensions, pooling helps the network to learn global representations of the input.</li>
+<li>Similar to convolutional layers, pooling uses a window (e.g., 2x2) that slides over the input feature map.</li>
+<li><p>
+Unlike convolutional layers, pooling layers have no learnable parameters (no kernels). They perform a fixed operation.
+</p>
+
+
+<div id="org403080b" class="figure">
+<p><img src="./images/CNN_13.png" alt="CNN_13.png" />
+</p>
+</div></li>
+
+<li><b>Max-Pooling:</b> Takes the maximum value within the pooling window.</li>
+<li><b>Average Pooling:</b> Takes the average value within the pooling window.</li>
+<li>Pooling channels like kernels can also be specified with it&rsquo;s own dimensions, padding, stride.</li>
+<li>Unlike convolutional layers where channels are summed, pooling layers operate on each channel independently.</li>
 </ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2025-01-14 Tue 20:45</p>
+<p class="date">Created: 2025-01-23 Thu 16:09</p>
 </div>
 </body>
 </html>

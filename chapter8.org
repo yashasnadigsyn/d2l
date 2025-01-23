@@ -116,3 +116,13 @@
   - *Scale and Shift:*
     - Multiply the normalized activations by a learnable scale parameter (γ) and add a learnable shift parameter (β). This allows the network to learn the optimal mean and variance for each layer, rather than always forcing them to be 0 and 1. This step restores the representation power of the network.
       - y = γ * x_normalized + β
+- *Why it's called "Batch" Normalization:* The statistics (mean and variance) are calculated over a batch of data, not the entire dataset.
+- Equation: BN(x) = γ * (x - μ_{B}) / (σ_{B} + ε) + β
+- *Why it works*
+  - *Reduces Internal Covariate Shift:* By normalizing the activations, batch normalization stabilizes the distribution of inputs to each layer, making training faster and more stable.
+  - *Allows Higher Learning Rates:* Batch normalization makes the optimization landscape smoother, allowing you to use larger learning rates without causing instability.
+  - *Acts as Regularization:* The noise introduced by using batch statistics acts as a form of regularization, reducing overfitting. This is because each example within a batch is normalized based on the other examples in the batch, adding a small amount of variation.
+  - *Makes Networks Less Sensitive to Initialization:* Batch normalization reduces the dependence on careful weight initialization.
+** Batch Normalization During Inference
+- *Difference from Training:* During inference, we don't have a batch of data to calculate statistics from. Instead, we use moving averages of the mean and variance that were computed during training.
+- *Moving Averages:* During training, we keep track of a running average of the batch means and variances. These moving averages are then used to normalize activations during inference. This makes the inference deterministic (the same input always gives the same output).
