@@ -1,0 +1,103 @@
+#+title: Batch Normalization vs Layer Normalization - Simple Example
+
+* Scenario
+We have a neural network with one hidden layer. The hidden layer has **3 neurons**, and we are processing a **batch of 2 examples**. Each example has **3 features**.
+
+** Input Batch (2 examples, 3 features each):
+#+BEGIN_SRC python
+X = [
+  [1, 2, 3],  # Example 1
+  [4, 5, 6]   # Example 2
+]
+#+END_SRC
+
+** Hidden Layer Output (Before Normalization):
+Assume the hidden layer produces the following outputs for the batch:
+#+BEGIN_SRC python
+H = [
+  [10, 20, 30],  # Example 1
+  [40, 50, 60]   # Example 2
+]
+#+END_SRC
+
+* 1. Batch Normalization
+Batch normalization normalizes **across the batch dimension** for each feature (neuron output). It computes the mean and variance for each column (neuron) across all examples in the batch.
+
+** Steps:
+1. Compute mean and variance for each feature (column):
+   - For the first feature (first column): [10, 40]
+     - Mean: μ₁ = (10 + 40) / 2 = 25
+     - Variance: σ₁² = [(10-25)² + (40-25)²] / 2 = 225
+   - For the second feature (second column): [20, 50]
+     - Mean: μ₂ = (20 + 50) / 2 = 35
+     - Variance: σ₂² = [(20-35)² + (50-35)²] / 2 = 225
+   - For the third feature (third column): [30, 60]
+     - Mean: μ₃ = (30 + 60) / 2 = 45
+     - Variance: σ₃² = [(30-45)² + (60-45)²] / 2 = 225
+
+2. Normalize each feature using its mean and variance:
+   - For the first feature:
+     - BN(10) = (10 - 25) / √225 = -1
+     - BN(40) = (40 - 25) / √225 = 1
+   - For the second feature:
+     - BN(20) = (20 - 35) / √225 = -1
+     - BN(50) = (50 - 35) / √225 = 1
+   - For the third feature:
+     - BN(30) = (30 - 45) / √225 = -1
+     - BN(60) = (60 - 45) / √225 = 1
+
+3. Final Normalized Output:
+#+BEGIN_SRC python
+H_BN = [
+  [-1, -1, -1],  # Example 1
+  [1, 1, 1]      # Example 2
+]
+#+END_SRC
+
+** Key Point:
+Batch normalization normalizes **across the batch** for each feature. It uses the statistics (mean and variance) of the entire batch.
+
+* 2. Layer Normalization
+Layer normalization normalizes **across the feature dimension** for each example. It computes the mean and variance for each row (example) across all features.
+
+** Steps:
+1. Compute mean and variance for each example (row):
+   - For the first example: [10, 20, 30]
+     - Mean: μ₁ = (10 + 20 + 30) / 3 = 20
+     - Variance: σ₁² = [(10-20)² + (20-20)² + (30-20)²] / 3 = 66.67
+   - For the second example: [40, 50, 60]
+     - Mean: μ₂ = (40 + 50 + 60) / 3 = 50
+     - Variance: σ₂² = [(40-50)² + (50-50)² + (60-50)²] / 3 = 66.67
+
+2. Normalize each example using its mean and variance:
+   - For the first example:
+     - LN(10) = (10 - 20) / √66.67 ≈ -1.22
+     - LN(20) = (20 - 20) / √66.67 = 0
+     - LN(30) = (30 - 20) / √66.67 ≈ 1.22
+   - For the second example:
+     - LN(40) = (40 - 50) / √66.67 ≈ -1.22
+     - LN(50) = (50 - 50) / √66.67 = 0
+     - LN(60) = (60 - 50) / √66.67 ≈ 1.22
+
+3. Final Normalized Output:
+#+BEGIN_SRC python
+H_LN = [
+  [-1.22, 0, 1.22],  # Example 1
+  [-1.22, 0, 1.22]   # Example 2
+]
+#+END_SRC
+
+** Key Point:
+Layer normalization normalizes **across the features** for each example. It uses the statistics (mean and variance) of each individual example.
+
+* Comparison
+| **Normalization**      | **Batch Normalization**                           | **Layer Normalization**                              |
+|------------------------+---------------------------------------------------+------------------------------------------------------|
+| **Normalization Axis** | Across the batch (rows) for each feature (column) | Across the features (columns) for each example (row) |
+| **Example 1**          | Normalizes [10, 40]                               | Normalizes [10, 20, 30]                              |
+| **Example 2**          | Normalizes [20, 50]                               | Normalizes [40, 50, 60]                              |
+| **Output**             | [[-1, -1, -1], [1, 1, 1]]                         | [[-1.22, 0, 1.22], [-1.22, 0, 1.22]]                 |
+
+* Intuition
+- **Batch Normalization:** Normalizes the outputs of each neuron across all examples in the batch. Ensures consistent scale across the batch.
+- **Layer Normalization:** Normalizes the outputs of all neurons for each example individually. Ensures consistent scale within each example.

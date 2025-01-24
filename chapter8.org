@@ -127,3 +127,43 @@
 - *Difference from Training:* During inference, we don't have a batch of data to calculate statistics from. Instead, we use moving averages of the mean and variance that were computed during training.
 - *Moving Averages:* During training, we keep track of a running average of the batch means and variances. These moving averages are then used to normalize activations during inference. This makes the inference deterministic (the same input always gives the same output).
 ** Batch Normalization Layers
+*** Batch Normalization
+- Batch normalization is a technique used to improve the training of deep neural networks. It normalizes the inputs of a layer by adjusting and scaling the activations to have a mean of 0 and a variance of 1. This helps in stabilizing and speeding up the training process.
+- Why is it needed?
+  - During training, the distribution of inputs to each layer can change as the weights of the previous layers are updated. This phenomenon is called internal covariate shift, and it can slow down training because the network has to constantly adapt to the new distributions. Batch normalization reduces this shift by normalizing the inputs.
+**** Batch Normalization in Fully Connected Layer vs Convolutional Layer
+- In fully connected layers, batch normalization is typically applied after the affine transformation (i.e., the linear transformation Wx+bWx+b) but before the nonlinear activation function (e.g., ReLU, sigmoid).
+- h=ϕ(BN(Wx+b))
+- In convolutional layers, batch normalization is applied after the convolution operation but before the activation function. The key difference from fully connected layers is that normalization is applied per channel across all spatial locations (height and width of the feature map).
+- How it works:
+  - Imagine you have a convolutional layer with 64 output channels, and the output feature maps have a size of 28×28. For each of the 64 channels, batch normalization computes the mean and variance across all 28×28 spatial locations and all examples in the minibatch. It then normalizes the activations for each channel independently.
+*** Layer Normalization
+- Layer normalization is an alternative to batch normalization. Instead of normalizing across the batch dimension, it normalizes across the features of a single example.
+- LN(x)= (x-μ)/sigma
+- Key Differences from Batch Normalization:
+  - Batch Normalization: Normalizes across the batch dimension (i.e., over multiple examples).
+  - Layer Normalization: Normalizes across the feature dimension (i.e., within a single example).
+- See [[./batch_vs_layer_example.org]] for example
+** Discussion on Batch Normalization
+*** Intuition Behind Batch Normalization
+- Makes the optimization landscape smoother.
+- Stabilizes activations during training
+*** Critiques of "Internal Covariate Shift"
+- Misnomer: Not the same as covariate shift.
+- Lacks rigorous theoretical foundation.
+*** Alternative Explanations
+- Smoother optimization landscape.
+- Regularization through noise.
+- Rescaling of activations.
+*** Practical Aspects
+- Stabilizes intermediate outputs.
+- Applied differently in fully connected vs. convolutional layers.
+- Different behaviors in training vs. prediction mode.
+- Improves convergence and acts as a regularizer.
+- Robustness considerations (e.g., removing batch normalization).
+*** Broader Implications
+- Highlights the gap between intuitions and rigorous explanations.
+- Batch normalization is widely used despite incomplete understanding.
+*** Key Takeaways
+- Batch normalization is empirically effective but theoretically unclear.
+- Practitioners should separate guiding intuitions from established facts.

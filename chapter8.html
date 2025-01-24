@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-23 Thu 16:08 -->
+<!-- 2025-01-24 Fri 14:58 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Chapter 8 - Modern CNN</title>
@@ -200,32 +200,48 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgaacbcb5">1. AlexNet</a></li>
-<li><a href="#orgb4fea32">2. VGG</a></li>
-<li><a href="#orgb0f1826">3. Network in Network</a></li>
-<li><a href="#orgc68522b">4. Multi-Branch Networks (GoogLeNet)</a>
+<li><a href="#org6fe9e24">1. AlexNet</a></li>
+<li><a href="#orgafe2783">2. VGG</a></li>
+<li><a href="#org41259df">3. Network in Network</a></li>
+<li><a href="#org360d771">4. Multi-Branch Networks (GoogLeNet)</a>
 <ul>
-<li><a href="#org3c01678">4.1. Inception Block</a></li>
-<li><a href="#org61d8881">4.2. GoogLeNet Architecture</a></li>
+<li><a href="#org102baa3">4.1. Inception Block</a></li>
+<li><a href="#org08f4b51">4.2. GoogLeNet Architecture</a></li>
 </ul>
 </li>
-<li><a href="#orgf565af3">5. Batch Normalization</a>
+<li><a href="#org2ae0a5c">5. Batch Normalization</a>
 <ul>
-<li><a href="#orgc877b4d">5.1. The Problem: Training Deep Networks is hard</a></li>
-<li><a href="#org1b92e24">5.2. The Solution</a>
+<li><a href="#org3f372d3">5.1. The Problem: Training Deep Networks is hard</a></li>
+<li><a href="#orgb933e9e">5.2. The Solution</a>
 <ul>
-<li><a href="#org15da522">5.2.1. Part 1: Standardization (Preprocessing)</a></li>
-<li><a href="#org55cfc23">5.2.2. Part 2: Batch Normalization (Training)</a></li>
+<li><a href="#org8037edb">5.2.1. Part 1: Standardization (Preprocessing)</a></li>
+<li><a href="#orgf568f88">5.2.2. Part 2: Batch Normalization (Training)</a></li>
 </ul>
 </li>
-<li><a href="#org1e5688d">5.3. Batch Normalization During Inference</a></li>
+<li><a href="#org126805a">5.3. Batch Normalization During Inference</a></li>
+<li><a href="#org932dc09">5.4. Batch Normalization Layers</a>
+<ul>
+<li><a href="#orgbf3c9e1">5.4.1. Batch Normalization</a></li>
+<li><a href="#org03f664d">5.4.2. Layer Normalization</a></li>
+</ul>
+</li>
+<li><a href="#org29af6a5">5.5. Discussion on Batch Normalization</a>
+<ul>
+<li><a href="#orgc2d05af">5.5.1. Intuition Behind Batch Normalization</a></li>
+<li><a href="#org3a89b56">5.5.2. Critiques of &ldquo;Internal Covariate Shift&rdquo;</a></li>
+<li><a href="#org64f28c4">5.5.3. Alternative Explanations</a></li>
+<li><a href="#org70b352b">5.5.4. Practical Aspects</a></li>
+<li><a href="#org03e0e13">5.5.5. Broader Implications</a></li>
+<li><a href="#org8fbb2be">5.5.6. Key Takeaways</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgaacbcb5" class="outline-2">
-<h2 id="orgaacbcb5"><span class="section-number-2">1.</span> AlexNet</h2>
+<div id="outline-container-org6fe9e24" class="outline-2">
+<h2 id="org6fe9e24"><span class="section-number-2">1.</span> AlexNet</h2>
 <div class="outline-text-2" id="text-1">
 <ul class="org-ul">
 <li><p>
@@ -233,7 +249,7 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </p>
 
 
-<div id="org2f58278" class="figure">
+<div id="org6642009" class="figure">
 <p><img src="./images/modern_CNN_1.png" alt="modern_CNN_1.png" />
 </p>
 </div></li>
@@ -245,8 +261,8 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb4fea32" class="outline-2">
-<h2 id="orgb4fea32"><span class="section-number-2">2.</span> VGG</h2>
+<div id="outline-container-orgafe2783" class="outline-2">
+<h2 id="orgafe2783"><span class="section-number-2">2.</span> VGG</h2>
 <div class="outline-text-2" id="text-2">
 <ul class="org-ul">
 <li>AlexNet: Individual convolutional layers with varying kernel sizes.
@@ -261,7 +277,7 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </ul>
 
 
-<div id="org40fec16" class="figure">
+<div id="org50e02e6" class="figure">
 <p><img src="./images/modern_CNN_2.png" alt="modern_CNN_2.png" />
 </p>
 </div>
@@ -281,8 +297,8 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb0f1826" class="outline-2">
-<h2 id="orgb0f1826"><span class="section-number-2">3.</span> Network in Network</h2>
+<div id="outline-container-org41259df" class="outline-2">
+<h2 id="org41259df"><span class="section-number-2">3.</span> Network in Network</h2>
 <div class="outline-text-2" id="text-3">
 <ul class="org-ul">
 <li><b>Parameter Explosion</b>
@@ -334,7 +350,7 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </ul>
 
 
-<div id="org420026b" class="figure">
+<div id="orgf19e95e" class="figure">
 <p><img src="./images/modern_CNN_3.png" alt="modern_CNN_3.png" />
 </p>
 </div>
@@ -352,8 +368,8 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc68522b" class="outline-2">
-<h2 id="orgc68522b"><span class="section-number-2">4.</span> Multi-Branch Networks (GoogLeNet)</h2>
+<div id="outline-container-org360d771" class="outline-2">
+<h2 id="org360d771"><span class="section-number-2">4.</span> Multi-Branch Networks (GoogLeNet)</h2>
 <div class="outline-text-2" id="text-4">
 <ul class="org-ul">
 <li>GoogLeNet is a multi-branch CNN architecture.</li>
@@ -366,11 +382,11 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 <li>Instead of trying to figure out the best size for convolution kernels (e.g., 3x3, 5x5), GoogLeNet used multiple kernel sizes in parallel and combined their outputs. This allowed it to capture features at different scales effectively.</li>
 </ul>
 </div>
-<div id="outline-container-org3c01678" class="outline-3">
-<h3 id="org3c01678"><span class="section-number-3">4.1.</span> Inception Block</h3>
+<div id="outline-container-org102baa3" class="outline-3">
+<h3 id="org102baa3"><span class="section-number-3">4.1.</span> Inception Block</h3>
 <div class="outline-text-3" id="text-4-1">
 
-<div id="org014e204" class="figure">
+<div id="org3bddca3" class="figure">
 <p><img src="./images/modern_CNN_4.png" alt="modern_CNN_4.png" />
 </p>
 </div>
@@ -380,11 +396,11 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </ul>
 </div>
 </div>
-<div id="outline-container-org61d8881" class="outline-3">
-<h3 id="org61d8881"><span class="section-number-3">4.2.</span> GoogLeNet Architecture</h3>
+<div id="outline-container-org08f4b51" class="outline-3">
+<h3 id="org08f4b51"><span class="section-number-3">4.2.</span> GoogLeNet Architecture</h3>
 <div class="outline-text-3" id="text-4-2">
 
-<div id="orga928efd" class="figure">
+<div id="org7bd4966" class="figure">
 <p><img src="./images/modern_CNN_5.png" alt="modern_CNN_5.png" />
 </p>
 </div>
@@ -399,12 +415,12 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </div>
 </div>
 </div>
-<div id="outline-container-orgf565af3" class="outline-2">
-<h2 id="orgf565af3"><span class="section-number-2">5.</span> Batch Normalization</h2>
+<div id="outline-container-org2ae0a5c" class="outline-2">
+<h2 id="org2ae0a5c"><span class="section-number-2">5.</span> Batch Normalization</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-orgc877b4d" class="outline-3">
-<h3 id="orgc877b4d"><span class="section-number-3">5.1.</span> The Problem: Training Deep Networks is hard</h3>
+<div id="outline-container-org3f372d3" class="outline-3">
+<h3 id="org3f372d3"><span class="section-number-3">5.1.</span> The Problem: Training Deep Networks is hard</h3>
 <div class="outline-text-3" id="text-5-1">
 <ul class="org-ul">
 <li><b>Vanishing/Exploding Gradients:</b> In very deep networks, gradients can become extremely small or large as they are backpropagated through many layers. This makes it hard for the optimization algorithm to update the weights effectively.</li>
@@ -414,12 +430,12 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </ul>
 </div>
 </div>
-<div id="outline-container-org1b92e24" class="outline-3">
-<h3 id="org1b92e24"><span class="section-number-3">5.2.</span> The Solution</h3>
+<div id="outline-container-orgb933e9e" class="outline-3">
+<h3 id="orgb933e9e"><span class="section-number-3">5.2.</span> The Solution</h3>
 <div class="outline-text-3" id="text-5-2">
 </div>
-<div id="outline-container-org15da522" class="outline-4">
-<h4 id="org15da522"><span class="section-number-4">5.2.1.</span> Part 1: Standardization (Preprocessing)</h4>
+<div id="outline-container-org8037edb" class="outline-4">
+<h4 id="org8037edb"><span class="section-number-4">5.2.1.</span> Part 1: Standardization (Preprocessing)</h4>
 <div class="outline-text-4" id="text-5-2-1">
 <ul class="org-ul">
 <li>Transforms data to have zero mean and unit variance.</li>
@@ -438,8 +454,8 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </ul>
 </div>
 </div>
-<div id="outline-container-org55cfc23" class="outline-4">
-<h4 id="org55cfc23"><span class="section-number-4">5.2.2.</span> Part 2: Batch Normalization (Training)</h4>
+<div id="outline-container-orgf568f88" class="outline-4">
+<h4 id="orgf568f88"><span class="section-number-4">5.2.2.</span> Part 2: Batch Normalization (Training)</h4>
 <div class="outline-text-4" id="text-5-2-2">
 <ul class="org-ul">
 <li>Batch Normalization extends the idea of standardization to the internal layers of a deep network. Instead of just standardizing the input data, it standardizes the activations of each layer during training.</li>
@@ -477,8 +493,8 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </div>
 </div>
 </div>
-<div id="outline-container-org1e5688d" class="outline-3">
-<h3 id="org1e5688d"><span class="section-number-3">5.3.</span> Batch Normalization During Inference</h3>
+<div id="outline-container-org126805a" class="outline-3">
+<h3 id="org126805a"><span class="section-number-3">5.3.</span> Batch Normalization During Inference</h3>
 <div class="outline-text-3" id="text-5-3">
 <ul class="org-ul">
 <li><b>Difference from Training:</b> During inference, we don&rsquo;t have a batch of data to calculate statistics from. Instead, we use moving averages of the mean and variance that were computed during training.</li>
@@ -486,10 +502,120 @@ AlexNet is an 8-layer convolutional neural network (CNN).
 </ul>
 </div>
 </div>
+<div id="outline-container-org932dc09" class="outline-3">
+<h3 id="org932dc09"><span class="section-number-3">5.4.</span> Batch Normalization Layers</h3>
+<div class="outline-text-3" id="text-5-4">
+</div>
+<div id="outline-container-orgbf3c9e1" class="outline-4">
+<h4 id="orgbf3c9e1"><span class="section-number-4">5.4.1.</span> Batch Normalization</h4>
+<div class="outline-text-4" id="text-5-4-1">
+<ul class="org-ul">
+<li>Batch normalization is a technique used to improve the training of deep neural networks. It normalizes the inputs of a layer by adjusting and scaling the activations to have a mean of 0 and a variance of 1. This helps in stabilizing and speeding up the training process.</li>
+<li>Why is it needed?
+<ul class="org-ul">
+<li>During training, the distribution of inputs to each layer can change as the weights of the previous layers are updated. This phenomenon is called internal covariate shift, and it can slow down training because the network has to constantly adapt to the new distributions. Batch normalization reduces this shift by normalizing the inputs.</li>
+</ul></li>
+</ul>
+</div>
+<ol class="org-ol">
+<li><a id="orgf4979c4"></a>Batch Normalization in Fully Connected Layer vs Convolutional Layer<br />
+<div class="outline-text-5" id="text-5-4-1-1">
+<ul class="org-ul">
+<li>In fully connected layers, batch normalization is typically applied after the affine transformation (i.e., the linear transformation Wx+bWx+b) but before the nonlinear activation function (e.g., ReLU, sigmoid).</li>
+<li>h=ϕ(BN(Wx+b))</li>
+<li>In convolutional layers, batch normalization is applied after the convolution operation but before the activation function. The key difference from fully connected layers is that normalization is applied per channel across all spatial locations (height and width of the feature map).</li>
+<li>How it works:
+<ul class="org-ul">
+<li>Imagine you have a convolutional layer with 64 output channels, and the output feature maps have a size of 28×28. For each of the 64 channels, batch normalization computes the mean and variance across all 28×28 spatial locations and all examples in the minibatch. It then normalizes the activations for each channel independently.</li>
+</ul></li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org03f664d" class="outline-4">
+<h4 id="org03f664d"><span class="section-number-4">5.4.2.</span> Layer Normalization</h4>
+<div class="outline-text-4" id="text-5-4-2">
+<ul class="org-ul">
+<li>Layer normalization is an alternative to batch normalization. Instead of normalizing across the batch dimension, it normalizes across the features of a single example.</li>
+<li>LN(x)= (x-μ)/sigma</li>
+<li>Key Differences from Batch Normalization:
+<ul class="org-ul">
+<li>Batch Normalization: Normalizes across the batch dimension (i.e., over multiple examples).</li>
+<li>Layer Normalization: Normalizes across the feature dimension (i.e., within a single example).</li>
+</ul></li>
+<li>See <a href="./batch_vs_layer_example.html">./batch_vs_layer_example.html</a> for example</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org29af6a5" class="outline-3">
+<h3 id="org29af6a5"><span class="section-number-3">5.5.</span> Discussion on Batch Normalization</h3>
+<div class="outline-text-3" id="text-5-5">
+</div>
+<div id="outline-container-orgc2d05af" class="outline-4">
+<h4 id="orgc2d05af"><span class="section-number-4">5.5.1.</span> Intuition Behind Batch Normalization</h4>
+<div class="outline-text-4" id="text-5-5-1">
+<ul class="org-ul">
+<li>Makes the optimization landscape smoother.</li>
+<li>Stabilizes activations during training</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org3a89b56" class="outline-4">
+<h4 id="org3a89b56"><span class="section-number-4">5.5.2.</span> Critiques of &ldquo;Internal Covariate Shift&rdquo;</h4>
+<div class="outline-text-4" id="text-5-5-2">
+<ul class="org-ul">
+<li>Misnomer: Not the same as covariate shift.</li>
+<li>Lacks rigorous theoretical foundation.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org64f28c4" class="outline-4">
+<h4 id="org64f28c4"><span class="section-number-4">5.5.3.</span> Alternative Explanations</h4>
+<div class="outline-text-4" id="text-5-5-3">
+<ul class="org-ul">
+<li>Smoother optimization landscape.</li>
+<li>Regularization through noise.</li>
+<li>Rescaling of activations.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org70b352b" class="outline-4">
+<h4 id="org70b352b"><span class="section-number-4">5.5.4.</span> Practical Aspects</h4>
+<div class="outline-text-4" id="text-5-5-4">
+<ul class="org-ul">
+<li>Stabilizes intermediate outputs.</li>
+<li>Applied differently in fully connected vs. convolutional layers.</li>
+<li>Different behaviors in training vs. prediction mode.</li>
+<li>Improves convergence and acts as a regularizer.</li>
+<li>Robustness considerations (e.g., removing batch normalization).</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org03e0e13" class="outline-4">
+<h4 id="org03e0e13"><span class="section-number-4">5.5.5.</span> Broader Implications</h4>
+<div class="outline-text-4" id="text-5-5-5">
+<ul class="org-ul">
+<li>Highlights the gap between intuitions and rigorous explanations.</li>
+<li>Batch normalization is widely used despite incomplete understanding.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org8fbb2be" class="outline-4">
+<h4 id="org8fbb2be"><span class="section-number-4">5.5.6.</span> Key Takeaways</h4>
+<div class="outline-text-4" id="text-5-5-6">
+<ul class="org-ul">
+<li>Batch normalization is empirically effective but theoretically unclear.</li>
+<li>Practitioners should separate guiding intuitions from established facts.</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2025-01-23 Thu 16:08</p>
+<p class="date">Created: 2025-01-24 Fri 14:58</p>
 </div>
 </body>
 </html>
