@@ -144,6 +144,7 @@
   - Batch Normalization: Normalizes across the batch dimension (i.e., over multiple examples).
   - Layer Normalization: Normalizes across the feature dimension (i.e., within a single example).
 - See [[./batch_vs_layer_example.org]] for example
+
 ** Discussion on Batch Normalization
 *** Intuition Behind Batch Normalization
 - Makes the optimization landscape smoother.
