@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-03-04 Tue 21:20 -->
+<!-- 2025-03-05 Wed 20:23 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Chapter 9 - RNNs</title>
@@ -200,56 +200,61 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org7173a98">1. RNNs</a>
+<li><a href="#org9e84c2a">1. RNNs</a>
 <ul>
-<li><a href="#orgd9dd715">1.1. Sequential Data</a></li>
-<li><a href="#org3451b3b">1.2. Why can&rsquo;t we just use fixed length models for sequential data?</a></li>
-<li><a href="#org4296587">1.3. Why RNNs?</a></li>
+<li><a href="#org1b11ff8">1.1. Sequential Data</a></li>
+<li><a href="#org653a500">1.2. Why can&rsquo;t we just use fixed length models for sequential data?</a></li>
+<li><a href="#orgb3242ad">1.3. Why RNNs?</a></li>
 </ul>
 </li>
-<li><a href="#org21dab6c">2. Working with sequences</a>
+<li><a href="#orgc1908fb">2. Working with sequences</a>
 <ul>
-<li><a href="#org013fc68">2.1. Types of Sequence Tasks</a>
+<li><a href="#org641242f">2.1. Types of Sequence Tasks</a>
 <ul>
-<li><a href="#org639d688">2.1.1. Sequence Input, Fixed Output</a></li>
-<li><a href="#org805f18a">2.1.2. Fixed Input, Sequence Output</a></li>
-<li><a href="#org2d08190">2.1.3. Sequence Input, Sequence Output</a></li>
+<li><a href="#org063628f">2.1.1. Sequence Input, Fixed Output</a></li>
+<li><a href="#orgc867c55">2.1.2. Fixed Input, Sequence Output</a></li>
+<li><a href="#orgcf64c18">2.1.3. Sequence Input, Sequence Output</a></li>
 </ul>
 </li>
-<li><a href="#orgbf89e6d">2.2. Unsupervised Density Modeling</a></li>
+<li><a href="#orgb271c83">2.2. Unsupervised Density Modeling</a></li>
 </ul>
 </li>
-<li><a href="#orgfa9b74f">3. Autoregressive Models</a></li>
-<li><a href="#org77cc578">4. Sequence Models</a>
+<li><a href="#orgd4bf5e0">3. Autoregressive Models</a></li>
+<li><a href="#orga5847b3">4. Sequence Models</a>
 <ul>
-<li><a href="#org00e29b2">4.1. Markov Models</a></li>
-<li><a href="#org6523ee3">4.2. The Order of Decoding</a></li>
+<li><a href="#org3dc585a">4.1. Markov Models</a></li>
+<li><a href="#org505087c">4.2. The Order of Decoding</a></li>
 </ul>
 </li>
-<li><a href="#orgde02be8">5. Converting Raw Text into Sequence Data</a></li>
-<li><a href="#org370bc72">6. Language Models</a>
+<li><a href="#orge90bc9c">5. Converting Raw Text into Sequence Data</a></li>
+<li><a href="#org6a231e3">6. Language Models</a>
 <ul>
-<li><a href="#orgc0cae15">6.1. Why are language models useful?</a></li>
-<li><a href="#orgbc2410f">6.2. Learning Language Models</a>
+<li><a href="#org4f948af">6.1. Why are language models useful?</a></li>
+<li><a href="#org5fbd9b7">6.2. Learning Language Models</a>
 <ul>
-<li><a href="#orgea15893">6.2.1. Markov Models and n-grams</a></li>
-<li><a href="#orgb658e27">6.2.2. Word Frequency</a></li>
-<li><a href="#org978ee1b">6.2.3. The problem of data sparsity</a></li>
-<li><a href="#orgb9e44f1">6.2.4. Laplace Smoothing</a></li>
+<li><a href="#orgdb90799">6.2.1. Markov Models and n-grams</a></li>
+<li><a href="#org9cd997a">6.2.2. Word Frequency</a></li>
+<li><a href="#org3b359ba">6.2.3. The problem of data sparsity</a></li>
+<li><a href="#org1b54355">6.2.4. Laplace Smoothing</a></li>
 </ul>
 </li>
-<li><a href="#org880c366">6.3. Perplexity</a></li>
+<li><a href="#org7a6bf80">6.3. Perplexity</a></li>
+</ul>
+</li>
+<li><a href="#orgdf6130f">7. Dive into RNNs</a>
+<ul>
+<li><a href="#org7be2340">7.1. MLP vs RNNs</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org7173a98" class="outline-2">
-<h2 id="org7173a98"><span class="section-number-2">1.</span> RNNs</h2>
+<div id="outline-container-org9e84c2a" class="outline-2">
+<h2 id="org9e84c2a"><span class="section-number-2">1.</span> RNNs</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgd9dd715" class="outline-3">
-<h3 id="orgd9dd715"><span class="section-number-3">1.1.</span> Sequential Data</h3>
+<div id="outline-container-org1b11ff8" class="outline-3">
+<h3 id="org1b11ff8"><span class="section-number-3">1.1.</span> Sequential Data</h3>
 <div class="outline-text-3" id="text-1-1">
 <ul class="org-ul">
 <li>Sequential data, which is data where the order matters (like words in a sentence, frames in a video, or events in a medical history). The key point is that while many ML problems use fixed-length inputs, many real-world problems involve variable-length sequences.</li>
@@ -258,8 +263,8 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org3451b3b" class="outline-3">
-<h3 id="org3451b3b"><span class="section-number-3">1.2.</span> Why can&rsquo;t we just use fixed length models for sequential data?</h3>
+<div id="outline-container-org653a500" class="outline-3">
+<h3 id="org653a500"><span class="section-number-3">1.2.</span> Why can&rsquo;t we just use fixed length models for sequential data?</h3>
 <div class="outline-text-3" id="text-1-2">
 <ul class="org-ul">
 <li>Variable length of input. A sentence can have 5 or 10 words. A video can have 50 or 200 frames.</li>
@@ -267,8 +272,8 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org4296587" class="outline-3">
-<h3 id="org4296587"><span class="section-number-3">1.3.</span> Why RNNs?</h3>
+<div id="outline-container-orgb3242ad" class="outline-3">
+<h3 id="orgb3242ad"><span class="section-number-3">1.3.</span> Why RNNs?</h3>
 <div class="outline-text-3" id="text-1-3">
 <ul class="org-ul">
 <li>RNNs are designed specifically for sequential data.</li>
@@ -277,7 +282,7 @@
 </ul>
 
 
-<div id="org11b22ca" class="figure">
+<div id="orgd2af09b" class="figure">
 <p><img src="./images/RNN_1.png" alt="RNN_1.png" />
 </p>
 </div>
@@ -288,8 +293,8 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org21dab6c" class="outline-2">
-<h2 id="org21dab6c"><span class="section-number-2">2.</span> Working with sequences</h2>
+<div id="outline-container-orgc1908fb" class="outline-2">
+<h2 id="orgc1908fb"><span class="section-number-2">2.</span> Working with sequences</h2>
 <div class="outline-text-2" id="text-2">
 <ul class="org-ul">
 <li>In fixed data, we had one single input vector, x ∈ R<sup>d.</sup></li>
@@ -298,28 +303,28 @@
 <li>Unlike tabular data where rows are independent, elements within a sequence are usually not independent.</li>
 </ul>
 </div>
-<div id="outline-container-org013fc68" class="outline-3">
-<h3 id="org013fc68"><span class="section-number-3">2.1.</span> Types of Sequence Tasks</h3>
+<div id="outline-container-org641242f" class="outline-3">
+<h3 id="org641242f"><span class="section-number-3">2.1.</span> Types of Sequence Tasks</h3>
 <div class="outline-text-3" id="text-2-1">
 </div>
-<div id="outline-container-org639d688" class="outline-4">
-<h4 id="org639d688"><span class="section-number-4">2.1.1.</span> Sequence Input, Fixed Output</h4>
+<div id="outline-container-org063628f" class="outline-4">
+<h4 id="org063628f"><span class="section-number-4">2.1.1.</span> Sequence Input, Fixed Output</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <ul class="org-ul">
 <li>Sentiment classification of a movie review. The input is a sequence of words, and the output is a single sentiment score (e.g., positive, negative).</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org805f18a" class="outline-4">
-<h4 id="org805f18a"><span class="section-number-4">2.1.2.</span> Fixed Input, Sequence Output</h4>
+<div id="outline-container-orgc867c55" class="outline-4">
+<h4 id="orgc867c55"><span class="section-number-4">2.1.2.</span> Fixed Input, Sequence Output</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <ul class="org-ul">
 <li>Image captioning. The input is a single image, and the output is a sequence of words describing the image.</li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org2d08190" class="outline-4">
-<h4 id="org2d08190"><span class="section-number-4">2.1.3.</span> Sequence Input, Sequence Output</h4>
+<div id="outline-container-orgcf64c18" class="outline-4">
+<h4 id="orgcf64c18"><span class="section-number-4">2.1.3.</span> Sequence Input, Sequence Output</h4>
 <div class="outline-text-4" id="text-2-1-3">
 <ul class="org-ul">
 <li>This is the most general case.</li>
@@ -329,8 +334,8 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgbf89e6d" class="outline-3">
-<h3 id="orgbf89e6d"><span class="section-number-3">2.2.</span> Unsupervised Density Modeling</h3>
+<div id="outline-container-orgb271c83" class="outline-3">
+<h3 id="orgb271c83"><span class="section-number-3">2.2.</span> Unsupervised Density Modeling</h3>
 <div class="outline-text-3" id="text-2-2">
 <ul class="org-ul">
 <li>The most straightforward problem in Sequence modeling.</li>
@@ -339,8 +344,8 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgfa9b74f" class="outline-2">
-<h2 id="orgfa9b74f"><span class="section-number-2">3.</span> Autoregressive Models</h2>
+<div id="outline-container-orgd4bf5e0" class="outline-2">
+<h2 id="orgd4bf5e0"><span class="section-number-2">3.</span> Autoregressive Models</h2>
 <div class="outline-text-2" id="text-3">
 <ul class="org-ul">
 <li><p>
@@ -348,7 +353,7 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </p>
 
 
-<div id="orgd9549e4" class="figure">
+<div id="org46bd85c" class="figure">
 <p><img src="./images/RNN_2.png" alt="RNN_2.png" />
 </p>
 </div></li>
@@ -400,8 +405,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </ul>
 </div>
 </div>
-<div id="outline-container-org77cc578" class="outline-2">
-<h2 id="org77cc578"><span class="section-number-2">4.</span> Sequence Models</h2>
+<div id="outline-container-orga5847b3" class="outline-2">
+<h2 id="orga5847b3"><span class="section-number-2">4.</span> Sequence Models</h2>
 <div class="outline-text-2" id="text-4">
 <ul class="org-ul">
 <li>Our goal is to estimate the joint probability of an entire sequence. This means figuring out how likely it is to see a specific sequence of elements together.</li>
@@ -410,8 +415,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 <li>p(x1, x2, &#x2026;, xT) = p(x1) * p(x2 | x1) * p(x3 | x1, x2) * &#x2026; * p(xT | x1, x2, &#x2026;, xT-1)</li>
 </ul>
 </div>
-<div id="outline-container-org00e29b2" class="outline-3">
-<h3 id="org00e29b2"><span class="section-number-3">4.1.</span> Markov Models</h3>
+<div id="outline-container-org3dc585a" class="outline-3">
+<h3 id="org3dc585a"><span class="section-number-3">4.1.</span> Markov Models</h3>
 <div class="outline-text-3" id="text-4-1">
 <ul class="org-ul">
 <li>Autoregressive models condition on the entire past. This can be computationally expensive and statistically challenging.</li>
@@ -422,8 +427,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </ul>
 </div>
 </div>
-<div id="outline-container-org6523ee3" class="outline-3">
-<h3 id="org6523ee3"><span class="section-number-3">4.2.</span> The Order of Decoding</h3>
+<div id="outline-container-org505087c" class="outline-3">
+<h3 id="org505087c"><span class="section-number-3">4.2.</span> The Order of Decoding</h3>
 <div class="outline-text-3" id="text-4-2">
 <ul class="org-ul">
 <li>Why do we factorize text in left-to-right fashion?
@@ -436,8 +441,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </div>
 </div>
 </div>
-<div id="outline-container-orgde02be8" class="outline-2">
-<h2 id="orgde02be8"><span class="section-number-2">5.</span> Converting Raw Text into Sequence Data</h2>
+<div id="outline-container-orge90bc9c" class="outline-2">
+<h2 id="orge90bc9c"><span class="section-number-2">5.</span> Converting Raw Text into Sequence Data</h2>
 <div class="outline-text-2" id="text-5">
 <ul class="org-ul">
 <li>Typical preprocessing pipelines execute the following steps:
@@ -450,8 +455,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </ul>
 </div>
 </div>
-<div id="outline-container-org370bc72" class="outline-2">
-<h2 id="org370bc72"><span class="section-number-2">6.</span> Language Models</h2>
+<div id="outline-container-org6a231e3" class="outline-2">
+<h2 id="org6a231e3"><span class="section-number-2">6.</span> Language Models</h2>
 <div class="outline-text-2" id="text-6">
 <ul class="org-ul">
 <li>The fundamental goal of a language model is to predict the probability of a sequence of words (or characters).</li>
@@ -463,8 +468,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 <li>Let&rsquo;s say T is 5, and the sequence is &ldquo;the cat sat on mat&rdquo;. The equation is figuring out the likelihood of that exact sequence appearing in that specific order. A good language model assigns a higher probability to plausible sequences and a lower probability to nonsensical ones.</li>
 </ul>
 </div>
-<div id="outline-container-orgc0cae15" class="outline-3">
-<h3 id="orgc0cae15"><span class="section-number-3">6.1.</span> Why are language models useful?</h3>
+<div id="outline-container-org4f948af" class="outline-3">
+<h3 id="org4f948af"><span class="section-number-3">6.1.</span> Why are language models useful?</h3>
 <div class="outline-text-3" id="text-6-1">
 <ul class="org-ul">
 <li>Text Generation.</li>
@@ -473,8 +478,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </ul>
 </div>
 </div>
-<div id="outline-container-orgbc2410f" class="outline-3">
-<h3 id="orgbc2410f"><span class="section-number-3">6.2.</span> Learning Language Models</h3>
+<div id="outline-container-org5fbd9b7" class="outline-3">
+<h3 id="org5fbd9b7"><span class="section-number-3">6.2.</span> Learning Language Models</h3>
 <div class="outline-text-3" id="text-6-2">
 <ul class="org-ul">
 <li><b>Core Idea:</b> The core idea of language models is to predict the next word in a sequence, given the words that came before.</li>
@@ -507,8 +512,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 <li>This is how we would calculate the probability of any sentence. However, calculating the later terms in a long sequence would require knowing the probabilities of every possible sequence of words that could precede a given word. This is computationally impossible! That&rsquo;s where Markov models come in.</li>
 </ul>
 </div>
-<div id="outline-container-orgea15893" class="outline-4">
-<h4 id="orgea15893"><span class="section-number-4">6.2.1.</span> Markov Models and n-grams</h4>
+<div id="outline-container-orgdb90799" class="outline-4">
+<h4 id="orgdb90799"><span class="section-number-4">6.2.1.</span> Markov Models and n-grams</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <ul class="org-ul">
 <li>Markov models simplify the problem by making a key assumption: the probability of the next word depends only on a limited number of previous words.</li>
@@ -540,8 +545,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb658e27" class="outline-4">
-<h4 id="orgb658e27"><span class="section-number-4">6.2.2.</span> Word Frequency</h4>
+<div id="outline-container-org9cd997a" class="outline-4">
+<h4 id="org9cd997a"><span class="section-number-4">6.2.2.</span> Word Frequency</h4>
 <div class="outline-text-4" id="text-6-2-2">
 <ul class="org-ul">
 <li>Now, how do we learn these probabilities (e.g., P(cat | The))? The simple answer is: count words in a large text dataset.</li>
@@ -557,8 +562,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </ul>
 </div>
 </div>
-<div id="outline-container-org978ee1b" class="outline-4">
-<h4 id="org978ee1b"><span class="section-number-4">6.2.3.</span> The problem of data sparsity</h4>
+<div id="outline-container-org3b359ba" class="outline-4">
+<h4 id="org3b359ba"><span class="section-number-4">6.2.3.</span> The problem of data sparsity</h4>
 <div class="outline-text-4" id="text-6-2-3">
 <ul class="org-ul">
 <li>The biggest challenge with n-grams models is data sparsity.</li>
@@ -570,8 +575,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </ul>
 </div>
 </div>
-<div id="outline-container-orgb9e44f1" class="outline-4">
-<h4 id="orgb9e44f1"><span class="section-number-4">6.2.4.</span> Laplace Smoothing</h4>
+<div id="outline-container-org1b54355" class="outline-4">
+<h4 id="org1b54355"><span class="section-number-4">6.2.4.</span> Laplace Smoothing</h4>
 <div class="outline-text-4" id="text-6-2-4">
 <ul class="org-ul">
 <li>The problem we&rsquo;re trying to solve is that our n-gram models suffer from the issue of zero probabilities. If a particular word or word sequence doesn&rsquo;t appear in our training data, we can&rsquo;t assign it a probability, and our model effectively thinks that sequence is impossible. Laplace smoothing is a simple technique to address this by adding a small value to all the counts. This ensures that no probability is ever truly zero.</li>
@@ -594,8 +599,8 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </div>
 </div>
 </div>
-<div id="outline-container-org880c366" class="outline-3">
-<h3 id="org880c366"><span class="section-number-3">6.3.</span> Perplexity</h3>
+<div id="outline-container-org7a6bf80" class="outline-3">
+<h3 id="org7a6bf80"><span class="section-number-3">6.3.</span> Perplexity</h3>
 <div class="outline-text-3" id="text-6-3">
 <ul class="org-ul">
 <li>Let&rsquo;s say, we have built a language model, but how good is it?</li>
@@ -697,9 +702,89 @@ Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants 
 </div>
 </div>
 </div>
+<div id="outline-container-orgdf6130f" class="outline-2">
+<h2 id="orgdf6130f"><span class="section-number-2">7.</span> Dive into RNNs</h2>
+<div class="outline-text-2" id="text-7">
+<ul class="org-ul">
+<li>Markov models (and n-grams) have a fundamental limitation: they can only &ldquo;remember&rdquo; a fixed number of previous words. If we want to capture long-range dependencies in text, we need to increase the order of the Markov model (the value of n).</li>
+<li>However, increasing n leads to an exponential increase in the number of parameters the model needs to store. If |V| is the size of our vocabulary, then an n-gram model needs to store |V|<sup>n</sup> numbers to represent all the probabilities. This becomes computationally infeasible very quickly. A moderate vocabulary of 20,000 words with n=5 would need 3.2 * 10<sup>21</sup> parameters!</li>
+<li>Instead of directly modeling the probability of a word given a fixed number of previous words (P(xt | xt-1, &#x2026;, xt-n+1)), we use a latent variable model:
+<ul class="org-ul">
+<li>P(xt | xt-1, &#x2026;, x1) ≈ P(xt | ht-1)</li>
+<li>Instead of making the probability of the word xt depend on all the previous words xt-1 &#x2026; x1, we approximate this by making it depend only on the hidden state ht-1.
+<ul class="org-ul">
+<li>ht-1: The hidden state at time step t-1. This is a vector that summarizes all the information from the sequence up to that point. It&rsquo;s a compact representation of the past.</li>
+</ul></li>
+<li>The idea is that ht-1 captures the relevant information from the past, so we don&rsquo;t need to explicitly consider all the previous words.</li>
+</ul></li>
+<li>At each time step t, the model reads the current word (xt) and updates its memory (ht) based on that word and its existing memory (ht-1).</li>
+<li>Why is this model better?
+<ul class="org-ul">
+<li>The number of parameters in the model is determined by the function f and the size of the hidden state. It doesn&rsquo;t grow exponentially with the length of the sequence.</li>
+<li>The hidden state can, in principle, capture information from arbitrarily far back in the sequence. This is because the information is passed along and updated at each time step. The function f just needs to be designed and trained well.</li>
+</ul></li>
+<li>Hidden layers vs Hidden states:
+<ul class="org-ul">
+<li><b>Hidden Layers:</b> These are layers within a neural network that transform the input data. They are &ldquo;hidden&rdquo; in the sense that they are not the direct input or output layers. They transform the input into a more useful representation.</li>
+<li><b>Hidden States:</b> Hidden states are technically speaking inputs to whatever we do at a given step, and they can only be computed by looking at data at previous time steps.</li>
+</ul></li>
+</ul>
+</div>
+<div id="outline-container-org7be2340" class="outline-3">
+<h3 id="org7be2340"><span class="section-number-3">7.1.</span> MLP vs RNNs</h3>
+<div class="outline-text-3" id="text-7-1">
+<ul class="org-ul">
+<li>Let&rsquo;s take an example of a standard MLP with a single hidden layer.
+<ul class="org-ul">
+<li>Input: X ∈ R<sup>n x d</sup>
+<ul class="org-ul">
+<li>n - batch size</li>
+<li>d - number of features for each example</li>
+</ul></li>
+<li>Hidden Layer Output: H = φ(XW<sub>xh</sub> + b<sub>h</sub>)
+<ul class="org-ul">
+<li>H ∈ R<sup>n x h</sup> : Output of the hidden layer where h is number of hidden units.</li>
+<li>φ - Activation function</li>
+<li>W<sub>xh</sub> ∈ R<sup>d x h</sup> : The weight matrix connecting the input layer to the hidden layer.</li>
+<li>b<sub>h</sub> ∈ R<sup>1 x h</sup>: The bias vector for the hidden layer.</li>
+</ul></li>
+<li>Output Layer: O = HW<sub>hq</sub> + b<sub>q</sub>
+<ul class="org-ul">
+<li>O ∈ R<sup>n x q</sup>: The output of the network. q is the number of output units.</li>
+<li>W<sub>hq</sub> ∈ R<sup>h x q</sup>: The weight matrix connecting the hidden layer to the output layer.</li>
+<li>b<sub>q</sub> ∈ R<sup>1 x q</sup>: The bias vector for the output layer.</li>
+</ul></li>
+</ul></li>
+<li>Key Points about MLP:
+<ul class="org-ul">
+<li>The MLP processes each input independently. It has no memory of previous inputs. The output for a given input depends only on that input and the network&rsquo;s parameters (weights and biases).</li>
+<li>The information flows in one direction: from input to hidden layer to output. There are no loops or cycles.</li>
+</ul></li>
+<li>Now, Let&rsquo;s talk about RNNs:
+<ul class="org-ul">
+<li>Input at time step t: X<sub>t</sub> ∈ R<sup>n x d</sup>
+<ul class="org-ul">
+<li>n: the batch size</li>
+<li>d: the number of input features at time step t</li>
+</ul></li>
+<li>Hidden Layer Output: H<sub>t</sub> = φ(X<sub>t</sub>W<sub>xh</sub> + H<sub>t-1</sub>W<sub>hh</sub> + b<sub>h</sub>)
+<ul class="org-ul">
+<li>H<sub>t</sub> ∈ R<sup>n x h</sup>: The hidden state at time step t. h is the number of hidden units. This is the same as in the MLP.</li>
+<li>φ: The activation function. This is the same as in the MLP.</li>
+<li>W<sub>xh</sub> ∈ R<sup>d x h</sup>: The weight matrix connecting the input at time t to the hidden state. This is the same as in the MLP.</li>
+<li>H<sub>t-1</sub> ∈ R<sup>n x h</sup>: The previous hidden state (the hidden state at time step t-1). This is the key difference from the MLP.</li>
+<li>W<sub>hh</sub> ∈ R<sup>h x h</sup>: The recurrent weight matrix connecting the previous hidden state to the current hidden state. This matrix determines how the past influences the present.</li>
+<li>b<sub>h</sub> ∈ R<sup>1 x h</sup>: The bias vector. This is the same as in the MLP.</li>
+</ul></li>
+</ul></li>
+<li>The main differences between MLP and RNNs are: H<sub>t-1</sub> and W<sub>hh</sub> which are the previous hidden state and the recurrent weight matrix. The MLP doesn&rsquo;t need any storage but RNNs does because they need to store the hidden states. Also, RNNs understand context but MLP doesn&rsquo;t. This is the reason why we use RNNs for language models.</li>
+</ul>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2025-03-04 Tue 21:20</p>
+<p class="date">Created: 2025-03-05 Wed 20:23</p>
 </div>
 </body>
 </html>
