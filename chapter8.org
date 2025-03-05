@@ -168,3 +168,180 @@
 *** Key Takeaways
 - Batch normalization is empirically effective but theoretically unclear.
 - Practitioners should separate guiding intuitions from established facts.
+* ResNet
+** Function Classes
+- Let F represent the set of functions a neural network can learn given it's architecture and hyperparameters. The goal is to find the best function f∗_{F}​ within F that approximates the "truth" function f∗ (the ideal function we want to learn).
+- If F is too small, the network might not be able to learn f*. If F is too large, the network might overfit or learn suboptimal functions.
+- *Nested Function Classes:* If F1⊆F2⊆⋯⊆F6​, then increasing the size of the function class (e.g., adding more layers) guarantees that the network becomes more expressive. This is because the larger function class includes all the smaller ones.
+- *Example:* Imagine we are trying to fit a curve to data points. If a function class only includes linear functions (F1​), We might not fit the data well. If we expand the function class to include quadratic functions (F2), we can fit the data better. If F2 includes all linear functions, then moving from F1​ to F2​ is guaranteed to improve the fit.
+
+  [[./images/modern_CNN_6.png]]
+
+- As illustrated by Fig, for non-nested function classes, a larger function class does not always move closer to the “truth” function
+  f*. For instance, on the left of Fig, though F3 is closer to f* than F1, F6 moves away and there is no guarantee that further increasing the complexity can reduce the distance from f*. With nested function classes where F1 ⊆ · · · ⊆ F6 on the right of Fig, we can avoid the aforementioned issue from the non-nested function classes.
+** ResNet
+- ResNet was introduced to address the problem of degradation in very deep networks: as networks get deeper, accuracy saturates and then degrades. This is counterintuitive because deeper networks should be more expressive.
+- ResNet introduces residual blocks, which make it easier for the network to learn the identity function f(x)=xf(x)=x. This is done by learning the residual mapping g(x)=f(x)−xg(x)=f(x)−x instead of directly learning f(x)f(x). If the identity mapping is optimal, the network only needs to push g(x)g(x) to zero, which is easier than learning f(x)f(x) from scratch.
+- *Residual Connection:* A shortcut connection (or skip connection) is added to bypass one or more layers. This allows the input to flow directly to the output, making it easier to train very deep networks.
+- *Example:* Imagine you're stacking layers to approximate a function. If the optimal function is just the identity (i.e., the output should be the same as the input), a regular network has to learn this explicitly. In a ResNet, the network only needs to learn the difference (residual) between the input and output, which is often close to zero. This makes training easier.
+
+  [[./images/modern_CNN_7.png]]
+
+** Residual Block Architecture
+
+[[./images/modern_CNN_8.png]]
+
+- A residual block consists of:
+  - Two 3x3 convolutional layers with batch normalization and ReLU activation.
+  - A shortcut connection that adds the input directly to the output of the convolutional layers.
+  - Optionally, a 1x1 convolutional layer to adjust the number of channels or spatial dimensions if needed.
+** ResNet Model Architecture
+- The ResNet model consists of:
+  * An initial 7x7 convolutional layer with 64 output channels and a stride of 2, followed by a 3x3 max-pooling layer with a stride of 2.
+  * Four modules made up of residual blocks. Each module has:
+    - A doubling of the number of channels.
+    - A halving of the spatial dimensions (height and width) using a stride of 2 in the first residual block.
+  * A global average pooling layer and a fully connected layer for classification.
+- ResNet Variants:
+  - ResNet-18: 18 layers (including convolutional and fully connected layers).
+  - ResNet-152: 152 layers (deeper version with more residual blocks).
+
+[[./images/modern_CNN_9.png]]
+* ResNext
+
+[[./images/modern_CNN_10.png]]
+
+** The Problem with ResNet
+- In ResNet, the trade-off between non-linearity and dimensionality within a block is a key challenge:
+  - *Non-linearity:* Adding more layers increases the network's ability to model complex functions.
+  - *Dimensionality:* Increasing the width (number of channels) of the convolutional layers allows the network to capture more features.
+- However, there is a problem with increasing the number of channels. For example, if a layer takes ci input channels and produces co output channels, the computational cost is proportional to O(ci⋅co). This makes it expensive to simply increase the width of the network.
+** Grouped Convolutions
+- The key innovation in ResNeXt is the use of grouped convolutions:
+  - A standard convolution takes ci​ input channels and produces co​ output channels, with a computational cost of O(ci⋅co).
+  - In a grouped convolution, the input channels are divided into g groups, and each group is processed independently. The computational cost is reduced to O(g⋅(ci/g)⋅(co/g))=O(ci​⋅co​/g), making it g times faster.
+  - The number of parameters is also reduced by a factor of g, as each group uses smaller matrices.
+** ResNeXt Block Design
+- The ResNeXt block is designed to address the limitations of grouped convolutions:
+  - *1x1 Convolution:* Reduces the number of input channels to a smaller bottleneck size b. This reduces computational cost.
+  - *Grouped 3x3 Convolution:* Processes the bottleneck channels in g independent groups.
+  - *1x1 Convolution:* Expands the channels back to the original size.
+  - *Shortcut Connection:* Adds the input to the output, similar to ResNet.
+* Designing Convolution Network Architectures
+** Overview
+- Modern network design for computer vision has largely relied on human intuition and creativity.
+- Key architectures include AlexNet, VGG, NiN, GoogLeNet, ResNets, ResNeXt, and SENets.
+- Neural Architecture Search (NAS) has also been used, but it is computationally expensive.
+- A new approach by Radosavovic et al. (2020) focuses on designing network design spaces, leading to RegNets.
+
+** Key Architectures
+*** AlexNet
+- First to beat conventional models on ImageNet.
+- Popularized deep networks with stacked convolutional layers.
+
+*** VGG Networks
+- Popularized 3x3 convolutions.
+- Uses a deep stack of 3x3 convolutions.
+
+*** NiN (Network in Network)
+- Introduced 1x1 convolutions for local nonlinearities.
+- Aggregates information across all locations at the network head.
+*** GoogLeNet
+- Introduced Inception blocks with multiple branches of different convolution widths.
+- Combines advantages of VGG and NiN.
+
+__license-mozilla-bp ResNets
+- Introduced identity mapping (f(x) = x) to allow for very deep networks.
+- Still popular almost a decade later.
+
+*** ResNeXt
+- Added grouped convolutions for better parameter and computation trade-offs.
+
+*** SENets (Squeeze-and-Excitation Networks)
+- Introduced per-channel global attention for efficient information transfer.
+
+** Neural Architecture Search (NAS)
+- Uses search strategies (e.g., brute-force, genetic algorithms, reinforcement learning) to find optimal architectures.
+- EfficientNets are a notable outcome of NAS.
+
+** RegNets and Design Spaces
+- Radosavovic et al. (2020) proposed a strategy to design network design spaces.
+- Focuses on optimizing distributions of networks rather than single networks.
+- Leads to RegNetX and RegNetY, along with guiding principles for CNN design.
+
+** AnyNet Design Space
+- Networks consist of a stem, body, and head.
+- **Stem**: Initial image processing, often with larger window convolutions.
+- **Body**: Multiple stages, each reducing spatial resolution.
+- **Head**: Converts features to outputs (e.g., softmax for classification).
+
+*** AnyNet Structure
+- Stem: 3x3 convolution with stride 2, batch norm, ReLU.
+- Body: 4 stages, each with ResNeXt blocks.
+- Head: Global average pooling followed by a fully connected layer.
+
+*** ResNeXt Block
+- Uses grouped convolutions.
+- First block in each stage halves resolution with stride 2.
+- Subsequent blocks maintain resolution and channels.
+
+*** Design Parameters
+- Block width (number of channels): \(c_0, c_1, c_2, c_3, c_4\).
+- Depth (number of blocks per stage): \(d_1, d_2, d_3, d_4\).
+- Bottleneck ratios: \(k_1, k_2, k_3, k_4\).
+- Group widths (number of groups): \(g_1, g_2, g_3, g_4\).
+
+** Distributions and Parameters of Design Spaces
+- Goal: Identify good parameters for the AnyNet design space.
+- Challenges: Large number of configurations (e.g., 17 parameters with 2 choices each lead to 131,072 combinations).
+- Strategy: Use assumptions to reduce the design space.
+
+*** Assumptions
+1. General design principles exist, so many networks satisfying these principles should perform well.
+2. Intermediate results can be used as proxies for final accuracy (multi-fidelity optimization).
+3. Results from smaller networks generalize to larger ones.
+4. Design aspects can be factorized, allowing independent optimization.
+
+*** Empirical CDF
+- \(F(e, p)\): Cumulative distribution function for errors committed by networks drawn from distribution \(p\).
+- Empirical CDF: \(\hat{F}(e, Z) = \frac{1}{n} \sum_{i=1}^n 1(e_i \leq e)\), where \(Z = \{net_1, ..., net_n\}\).
+
+*** Simplifying Design Space
+- Shared bottleneck ratio \(k_i = k\) for all stages.
+- Shared group width \(g_i = g\) for all stages.
+- Increasing channels and depth across stages improves performance.
+
+** Code Implementation
+- AnyNet class in PyTorch:
+  - Stem: 3x3 convolution, batch norm, ReLU.
+  - Stage: ResNeXt blocks with optional downsampling.
+  - Head: Global average pooling, flatten, fully connected layer.
+
+#+BEGIN_SRC python
+class AnyNet(d2l.Classifier):
+    def stem(self, num_channels):
+        return nn.Sequential(
+            nn.LazyConv2d(num_channels, kernel_size=3, stride=2, padding=1),
+            nn.LazyBatchNorm2d(), nn.ReLU())
+
+    def stage(self, depth, num_channels, groups, bot_mul):
+        blk = []
+        for i in range(depth):
+            if i == 0:
+                blk.append(d2l.ResNeXtBlock(num_channels, groups, bot_mul,
+                                            use_1x1conv=True, strides=2))
+            else:
+                blk.append(d2l.ResNeXtBlock(num_channels, groups, bot_mul))
+        return nn.Sequential(*blk)
+
+    def __init__(self, arch, stem_channels, lr=0.1, num_classes=10):
+        super(AnyNet, self).__init__()
+        self.save_hyperparameters()
+        self.net = nn.Sequential(self.stem(stem_channels))
+        for i, s in enumerate(arch):
+            self.net.add_module(f'stage{i+1}', self.stage(*s))
+        self.net.add_module('head', nn.Sequential(
+            nn.AdaptiveAvgPool2d((1, 1)), nn.Flatten(),
+            nn.LazyLinear(num_classes)))
+        self.net.apply(d2l.init_cnn)
+#+END_SRC

@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-03-04 Tue 21:20 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chapter 9 - RNNs</title>
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Chapter 9 - RNNs</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org7173a98">1. RNNs</a>
+<ul>
+<li><a href="#orgd9dd715">1.1. Sequential Data</a></li>
+<li><a href="#org3451b3b">1.2. Why can&rsquo;t we just use fixed length models for sequential data?</a></li>
+<li><a href="#org4296587">1.3. Why RNNs?</a></li>
+</ul>
+</li>
+<li><a href="#org21dab6c">2. Working with sequences</a>
+<ul>
+<li><a href="#org013fc68">2.1. Types of Sequence Tasks</a>
+<ul>
+<li><a href="#org639d688">2.1.1. Sequence Input, Fixed Output</a></li>
+<li><a href="#org805f18a">2.1.2. Fixed Input, Sequence Output</a></li>
+<li><a href="#org2d08190">2.1.3. Sequence Input, Sequence Output</a></li>
+</ul>
+</li>
+<li><a href="#orgbf89e6d">2.2. Unsupervised Density Modeling</a></li>
+</ul>
+</li>
+<li><a href="#orgfa9b74f">3. Autoregressive Models</a></li>
+<li><a href="#org77cc578">4. Sequence Models</a>
+<ul>
+<li><a href="#org00e29b2">4.1. Markov Models</a></li>
+<li><a href="#org6523ee3">4.2. The Order of Decoding</a></li>
+</ul>
+</li>
+<li><a href="#orgde02be8">5. Converting Raw Text into Sequence Data</a></li>
+<li><a href="#org370bc72">6. Language Models</a>
+<ul>
+<li><a href="#orgc0cae15">6.1. Why are language models useful?</a></li>
+<li><a href="#orgbc2410f">6.2. Learning Language Models</a>
+<ul>
+<li><a href="#orgea15893">6.2.1. Markov Models and n-grams</a></li>
+<li><a href="#orgb658e27">6.2.2. Word Frequency</a></li>
+<li><a href="#org978ee1b">6.2.3. The problem of data sparsity</a></li>
+<li><a href="#orgb9e44f1">6.2.4. Laplace Smoothing</a></li>
+</ul>
+</li>
+<li><a href="#org880c366">6.3. Perplexity</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7173a98" class="outline-2">
+<h2 id="org7173a98"><span class="section-number-2">1.</span> RNNs</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-orgd9dd715" class="outline-3">
+<h3 id="orgd9dd715"><span class="section-number-3">1.1.</span> Sequential Data</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Sequential data, which is data where the order matters (like words in a sentence, frames in a video, or events in a medical history). The key point is that while many ML problems use fixed-length inputs, many real-world problems involve variable-length sequences.</li>
+<li>The sequence matters here than tabular data.</li>
+<li>Example: In a dataset, A house having two bedrooms and one kitchen is same as A house having one kitchen and two bedrooms. The sequence does not matter here. The number of bedrooms and kitchen matters. But, In sequential data, the order matters.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org3451b3b" class="outline-3">
+<h3 id="org3451b3b"><span class="section-number-3">1.2.</span> Why can&rsquo;t we just use fixed length models for sequential data?</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>Variable length of input. A sentence can have 5 or 10 words. A video can have 50 or 200 frames.</li>
+<li>Order of the data matters.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org4296587" class="outline-3">
+<h3 id="org4296587"><span class="section-number-3">1.3.</span> Why RNNs?</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>RNNs are designed specifically for sequential data.</li>
+<li>They have a &ldquo;memory&rdquo; of sorts. They process the sequence element by element, and their internal state is updated at each step based on the current element and the previous state. This allows them to capture the dependencies and relationships between elements in the sequence.</li>
+<li><b>Recurrent Connections:</b> In an RNN, some of the outputs of a layer are fed back into the same layer as inputs in the next time step. This creates a cycle. This &ldquo;feedback loop&rdquo; is what allows the network to maintain a state and &ldquo;remember&rdquo; information from previous parts of the sequence.</li>
+</ul>
+
+
+<div id="org11b22ca" class="figure">
+<p><img src="./images/RNN_1.png" alt="RNN_1.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>While the inputs and targets for many fundamental tasks in machine learning cannot easily be represented as fixed-length vectors, they can often nevertheless be represented as varying-length sequences of fixed-length vectors. For example, documents can be represented as sequences of words; medical records can often be represented as sequences of events (encounters, medications, procedures, lab tests, diagnoses); videos can be represented as varying-length sequences of still images.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org21dab6c" class="outline-2">
+<h2 id="org21dab6c"><span class="section-number-2">2.</span> Working with sequences</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>In fixed data, we had one single input vector, x ∈ R<sup>d.</sup></li>
+<li>We now focus on inputs that consist of an ordered list of feature vectors x1, . . . , x𝑇 , where each feature vector x𝑡 is indexed by a time step 𝑡 ∈ Z+ lying in R𝑑.</li>
+<li>We can break one long sequence to make it smaller subsequences.</li>
+<li>Unlike tabular data where rows are independent, elements within a sequence are usually not independent.</li>
+</ul>
+</div>
+<div id="outline-container-org013fc68" class="outline-3">
+<h3 id="org013fc68"><span class="section-number-3">2.1.</span> Types of Sequence Tasks</h3>
+<div class="outline-text-3" id="text-2-1">
+</div>
+<div id="outline-container-org639d688" class="outline-4">
+<h4 id="org639d688"><span class="section-number-4">2.1.1.</span> Sequence Input, Fixed Output</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<ul class="org-ul">
+<li>Sentiment classification of a movie review. The input is a sequence of words, and the output is a single sentiment score (e.g., positive, negative).</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org805f18a" class="outline-4">
+<h4 id="org805f18a"><span class="section-number-4">2.1.2.</span> Fixed Input, Sequence Output</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<ul class="org-ul">
+<li>Image captioning. The input is a single image, and the output is a sequence of words describing the image.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org2d08190" class="outline-4">
+<h4 id="org2d08190"><span class="section-number-4">2.1.3.</span> Sequence Input, Sequence Output</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<ul class="org-ul">
+<li>This is the most general case.</li>
+<li><b>Aligned:</b> There is a direct correspondence between the input and output at each time step. Example: Part-of-speech tagging. Each word in the input sentence is tagged with its part of speech (noun, verb, adjective, etc.).</li>
+<li><b>Unaligned:</b> The input and output sequences don&rsquo;t have a one-to-one correspondence. Example: Machine translation. The order of words in the input and output sentences might be different. One word in the input might correspond to multiple words in the output, or vice-versa.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbf89e6d" class="outline-3">
+<h3 id="orgbf89e6d"><span class="section-number-3">2.2.</span> Unsupervised Density Modeling</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>The most straightforward problem in Sequence modeling.</li>
+<li>Given a set of sequences, learn the probability distribution of those sequences. In other words, learn how likely you are to see any particular sequence.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgfa9b74f" class="outline-2">
+<h2 id="orgfa9b74f"><span class="section-number-2">3.</span> Autoregressive Models</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li><p>
+Let&rsquo;s suppose a trader wants to build a model on FTSE 100 index. He wants to predict the future price of the index given it&rsquo;s past history.
+</p>
+
+
+<div id="orgd9549e4" class="figure">
+<p><img src="./images/RNN_2.png" alt="RNN_2.png" />
+</p>
+</div></li>
+
+<li>The only information available to predict the next price is the sequence of past prices.</li>
+<li>p(x<sub>t</sub> | x<sub>t-1</sub>,&#x2026;,x<sub>1</sub>) - This is the conditional probability of the price x<sub>t</sub> at time t, given the prices at all previous times. In other words, it&rsquo;s the probability distribution of what the price could be at time t, knowing what happened before.</li>
+<li>We have to estimate this probability distribution, or atleast, expected value (mean) and variance of the distribution.</li>
+<li>A model that predicts a value based on its own past values is called an <b>autoregressive</b> model.</li>
+<li>Example:
+<ul class="org-ul">
+<li>Let&rsquo;s say we want to predict the stock price on day 5, using an autoregressive model.
+<ul class="org-ul">
+<li>x1 = Stock price on day 1</li>
+<li>x2 = Stock price on day 2</li>
+<li>x3 = Stock price on day 3</li>
+<li>x4 = Stock price on day 4</li>
+<li>x5 = Stock price on day 5 (what we want to predict)</li>
+</ul></li>
+
+<li>A simple autoregressive model might be:
+<ul class="org-ul">
+<li>x<sub>5</sub> = b + w1x1 + w2x2 + w3x3 + w4x4</li>
+</ul></li>
+</ul></li>
+
+<li>The problem with Basic Autoregressive Models
+<ul class="org-ul">
+<li>The biggest problem is the variable number of inputs. We don&rsquo;t have any fixed time interval in stock price prediction.</li>
+</ul></li>
+
+<li>Strategies for overcoming the challenges of variable number of inputs
+<ul class="org-ul">
+<li>There are two main strategies to deal with the variable number of inputs
+<ul class="org-ul">
+<li>Fixed-Length Window:
+<ul class="org-ul">
+<li>Instead of using all past values, only use the last τ (tau) values. τ is called the &ldquo;window size&rdquo; or the &ldquo;lag&rdquo;.</li>
+<li>The number of inputs is always the same (equal to τ), at least for t &gt; τ.</li>
+<li>The limitation is we forget all past values and only remember recent values.</li>
+</ul></li>
+<li>Latent Autoregressive Models:
+<ul class="org-ul">
+<li>Maintain a summary that represents the past.</li>
+<li>Use the past observations x<sub>t-1</sub>, &#x2026;, x<sub>1</sub> to create or update the hidden state h<sub>t-1</sub>.</li>
+<li>Use h<sub>t-1</sub> to predict the next value x<sub>t</sub>.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org77cc578" class="outline-2">
+<h2 id="org77cc578"><span class="section-number-2">4.</span> Sequence Models</h2>
+<div class="outline-text-2" id="text-4">
+<ul class="org-ul">
+<li>Our goal is to estimate the joint probability of an entire sequence. This means figuring out how likely it is to see a specific sequence of elements together.</li>
+<li>Generally, these estimated functions are called sequence models and for natural language data, they are called language models.</li>
+<li>Language models can be reduced to autoregressive functions by decomposing the joint density of a sequence 𝑝(𝑥1, . . . , 𝑥𝑇 ) into the product of conditional densities.</li>
+<li>p(x1, x2, &#x2026;, xT) = p(x1) * p(x2 | x1) * p(x3 | x1, x2) * &#x2026; * p(xT | x1, x2, &#x2026;, xT-1)</li>
+</ul>
+</div>
+<div id="outline-container-org00e29b2" class="outline-3">
+<h3 id="org00e29b2"><span class="section-number-3">4.1.</span> Markov Models</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li>Autoregressive models condition on the entire past. This can be computationally expensive and statistically challenging.</li>
+<li>Markov Models assumes that the future is conditionally independent of the past, given the recent history. In other words, to predict the next element in the sequence, you only need to know the last τ elements. Everything before that is irrelevant.</li>
+<li>τ (tau): The order of the Markov model. It determines how many previous time steps you need to consider.</li>
+<li>k-th Order Markov Model: A Markov model that conditions on the k previous time steps.</li>
+<li>First-Order Markov Model (τ = 1): The simplest case. The next element only depends on the immediately preceding element.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org6523ee3" class="outline-3">
+<h3 id="org6523ee3"><span class="section-number-3">4.2.</span> The Order of Decoding</h3>
+<div class="outline-text-3" id="text-4-2">
+<ul class="org-ul">
+<li>Why do we factorize text in left-to-right fashion?
+<ul class="org-ul">
+<li>First, It is more natural. It is how we read and right most languages. We have better intuitions about what words are likely to come next.</li>
+<li>We can easily extend a sequence by multiplying by the conditional probability of the next token: P(x<sub>t+1</sub> | x<sub>t</sub>, &#x2026;, x<sub>1</sub>).</li>
+<li>We&rsquo;re generally better at predicting adjacent words than words at arbitrary locations.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgde02be8" class="outline-2">
+<h2 id="orgde02be8"><span class="section-number-2">5.</span> Converting Raw Text into Sequence Data</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>Typical preprocessing pipelines execute the following steps:
+<ol class="org-ol">
+<li>Load text as strings into memory</li>
+<li>Split the text into tokens (ex: words or characters)</li>
+<li>Build a vocabulary to associate each vocabulary element with a numerical index.</li>
+<li>Convert the text into sequences of numerical indices.</li>
+</ol></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org370bc72" class="outline-2">
+<h2 id="org370bc72"><span class="section-number-2">6.</span> Language Models</h2>
+<div class="outline-text-2" id="text-6">
+<ul class="org-ul">
+<li>The fundamental goal of a language model is to predict the probability of a sequence of words (or characters).</li>
+<li>Given some text, the model already has seen, what&rsquo;s the likelihood that the next word will be a specific word?</li>
+<li>The goal of the language models is to estimate the joint probability of the whole sequence:
+<ul class="org-ul">
+<li>P(x<sub>1</sub>, x<sub>2</sub>,&#x2026;,X<sub>T</sub>)</li>
+</ul></li>
+<li>Let&rsquo;s say T is 5, and the sequence is &ldquo;the cat sat on mat&rdquo;. The equation is figuring out the likelihood of that exact sequence appearing in that specific order. A good language model assigns a higher probability to plausible sequences and a lower probability to nonsensical ones.</li>
+</ul>
+</div>
+<div id="outline-container-orgc0cae15" class="outline-3">
+<h3 id="orgc0cae15"><span class="section-number-3">6.1.</span> Why are language models useful?</h3>
+<div class="outline-text-3" id="text-6-1">
+<ul class="org-ul">
+<li>Text Generation.</li>
+<li>Speech Recognition.</li>
+<li>Document Summarization.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgbc2410f" class="outline-3">
+<h3 id="orgbc2410f"><span class="section-number-3">6.2.</span> Learning Language Models</h3>
+<div class="outline-text-3" id="text-6-2">
+<ul class="org-ul">
+<li><b>Core Idea:</b> The core idea of language models is to predict the next word in a sequence, given the words that came before.</li>
+<li>The obvious question is how to model a document, or a sequence of tokens?
+<ul class="org-ul">
+<li>We use the chain rule of probability applied to a sequence of words:
+<ul class="org-ul">
+<li>P(x1, x2, &#x2026;, xT) = P(x1) * P(x2 | x1) * &#x2026; * P(xT | x1, &#x2026;, xT-1)</li>
+</ul></li>
+</ul></li>
+<li>Example:
+<ul class="org-ul">
+<li>Let&rsquo;s take an example: &ldquo;deep learning is fun&rdquo;,
+<ul class="org-ul">
+<li>P(deep, learning, is, fun) = P(deep) * P(learning | deep) * P(is | deep, learning) * P(fun | deep, learning, is)
+<ul class="org-ul">
+<li>This means:
+<ul class="org-ul">
+<li>The probability of the whole sequence &ldquo;deep learning is fun&rdquo; is equal to&#x2026;
+<ul class="org-ul">
+<li>The probability of &ldquo;deep&rdquo; starting the sentence multiplied by&#x2026;</li>
+<li>The probability of &ldquo;learning&rdquo; following &ldquo;deep&rdquo; multiplied by&#x2026;</li>
+<li>The probability of &ldquo;is&rdquo; following &ldquo;deep learning&rdquo; multiplied by&#x2026;</li>
+<li>The probability of &ldquo;fun&rdquo; following &ldquo;deep learning is&rdquo;.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>This is how we would calculate the probability of any sentence. However, calculating the later terms in a long sequence would require knowing the probabilities of every possible sequence of words that could precede a given word. This is computationally impossible! That&rsquo;s where Markov models come in.</li>
+</ul>
+</div>
+<div id="outline-container-orgea15893" class="outline-4">
+<h4 id="orgea15893"><span class="section-number-4">6.2.1.</span> Markov Models and n-grams</h4>
+<div class="outline-text-4" id="text-6-2-1">
+<ul class="org-ul">
+<li>Markov models simplify the problem by making a key assumption: the probability of the next word depends only on a limited number of previous words.</li>
+<li><b>Markov Property:</b> A sequence has the Markov property (of order 1) if the probability of the next word depends only on the current word. Higher orders mean it depends on more previous words.</li>
+<li><b>n-grams:</b> n-grams are models that use this Markov assumption. &ldquo;n&rdquo; represents the number of words considered in the context.
+<ul class="org-ul">
+<li><b>Unigram (n=1):</b> The probability of a word is independent of all other words. (P(x1, x2, x3, x4) = P(x1) * P(x2) * P(x3) * P(x4))
+<ul class="org-ul">
+<li>Example: The probability of &ldquo;The cat sat on the mat&rdquo; is just:
+<ul class="org-ul">
+<li>P(The) * P(cat) * P(sat) * P(on) * P(the) * P(mat). It doesn&rsquo;t consider the relationships between the words.</li>
+</ul></li>
+</ul></li>
+<li><b>Bigram (n=2):</b> The probability of a word depends only on the previous word. (P(x1, x2, x3, x4) = P(x1) * P(x2 | x1) * P(x3 | x2) * P(x4 | x3))
+<ul class="org-ul">
+<li>Example: The probability of &ldquo;The cat sat on the mat&rdquo; is:
+<ul class="org-ul">
+<li>P(The) * P(cat | The) * P(sat | cat) * P(on | sat) * P(the | on) * P(mat | the). It considers pairs of words.</li>
+</ul></li>
+</ul></li>
+<li><b>Trigram (n=3):</b> The probability of a word depends only on the previous two words. (P(x1, x2, x3, x4) = P(x1) * P(x2 | x1) * P(x3 | x1, x2) * P(x4 | x2, x3))
+<ul class="org-ul">
+<li>Example: The probability of &ldquo;The cat sat on the mat&rdquo; is:
+<ul class="org-ul">
+<li>P(The) * P(cat | The) * P(sat | The, cat) * P(on | cat, sat) * P(the | sat, on) * P(mat | on, the). It considers triplets of words.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb658e27" class="outline-4">
+<h4 id="orgb658e27"><span class="section-number-4">6.2.2.</span> Word Frequency</h4>
+<div class="outline-text-4" id="text-6-2-2">
+<ul class="org-ul">
+<li>Now, how do we learn these probabilities (e.g., P(cat | The))? The simple answer is: count words in a large text dataset.</li>
+<li>P(deep): This is estimated by counting how many times the word &ldquo;deep&rdquo; appears and dividing by the total number of words in your dataset. Alternatively, you could count how often sentences start with &ldquo;deep&rdquo;.</li>
+<li>P(learning | deep): This is estimated using the formula:
+<ul class="org-ul">
+<li>P(learning | deep) = n(deep, learning) / n(deep)
+<ul class="org-ul">
+<li>Where, n(deep, learning): The number of times the sequence &ldquo;deep learning&rdquo; appears in the dataset.</li>
+<li>n(deep): The number of times the word &ldquo;deep&rdquo; appears in the dataset.</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org978ee1b" class="outline-4">
+<h4 id="org978ee1b"><span class="section-number-4">6.2.3.</span> The problem of data sparsity</h4>
+<div class="outline-text-4" id="text-6-2-3">
+<ul class="org-ul">
+<li>The biggest challenge with n-grams models is data sparsity.</li>
+<li>Some examples are:
+<ul class="org-ul">
+<li>Rare word combinations: Many perfectly valid word combinations will simply not appear in training dataset, especially if the dataset is not huge.</li>
+<li>Zero counts: Language models will assign a probability of zero to sentences containing unseen (but perfectly grammatical) word combinations.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgb9e44f1" class="outline-4">
+<h4 id="orgb9e44f1"><span class="section-number-4">6.2.4.</span> Laplace Smoothing</h4>
+<div class="outline-text-4" id="text-6-2-4">
+<ul class="org-ul">
+<li>The problem we&rsquo;re trying to solve is that our n-gram models suffer from the issue of zero probabilities. If a particular word or word sequence doesn&rsquo;t appear in our training data, we can&rsquo;t assign it a probability, and our model effectively thinks that sequence is impossible. Laplace smoothing is a simple technique to address this by adding a small value to all the counts. This ensures that no probability is ever truly zero.</li>
+<li>Example for unigrams:
+<ul class="org-ul">
+<li>P(x) = (n(x) + e1/m)/(n+e1)
+<ul class="org-ul">
+<li>The above e1 is a smoothing hyperparameter, which if zero, will give us the original n-grams formula and if it is positive infinity, the P(x) approaches 1/m, which is a uniform distribution, where the smoothing dominates and the model will forget the training dataset.</li>
+</ul></li>
+</ul></li>
+<li>Some reasons why laplace smoothing, while simple, isn&rsquo;t ideal for language modeling:
+<ul class="org-ul">
+<li>Even with Laplace smoothing, the counts for many n-grams (especially higher-order n-grams) will be very small. This means the smoothed probabilities will be heavily influenced by the smoothing constant, and less by the actual observed data. The model might not be very accurate.</li>
+<li>To apply Laplace smoothing, we need to store all the n-gram counts. This can require a lot of memory, especially for large datasets and higher-order n-grams. The space grows combinatorially with the order n.</li>
+<li>Laplace smoothing treats words as completely independent symbols. It doesn&rsquo;t capture any semantic relationships between words. For example, &ldquo;cat&rdquo; and &ldquo;feline&rdquo; are closely related, but Laplace smoothing wouldn&rsquo;t know this. More advanced techniques like word embeddings (used in neural networks) can capture these relationships.</li>
+<li>Language is creative. we&rsquo;ll almost always encounter word sequences we&rsquo;ve never seen before, especially with longer sequences. A model that relies solely on counting previously seen sequences will perform poorly on these novel sequences.</li>
+</ul></li>
+<li>Because of these above reasons, neural networks are a better approach for language modeling.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org880c366" class="outline-3">
+<h3 id="org880c366"><span class="section-number-3">6.3.</span> Perplexity</h3>
+<div class="outline-text-3" id="text-6-3">
+<ul class="org-ul">
+<li>Let&rsquo;s say, we have built a language model, but how good is it?</li>
+<li>The core idea is that a good language model should be able to predict the next word in a sequence with high accuracy.</li>
+<li>Examples:
+<ul class="org-ul">
+<li>There are three language models that predicted the next tokens after the phrase &ldquo;It is raining&rdquo;:
+<ul class="org-ul">
+<li>&ldquo;It is raining outside&rdquo; (Good - makes sense)</li>
+<li>&ldquo;It is raining banana tree&rdquo; (Bad - grammatically correct, but semantically nonsensical)</li>
+<li>&ldquo;It is raining piouw;kcj pwepoiut&rdquo; (Terrible - gibberish)</li>
+</ul></li>
+</ul></li>
+<li>Likelihood as a metric for assessing quality of data isn&rsquo;t enough. We could just calculate the likelihood (probability) that the model assigns to a particular sequence of words. But, There are some problems:
+<ul class="org-ul">
+<li>Longer sequences tend to have lower probabilities simply because they&rsquo;re longer. It&rsquo;s like comparing apples and oranges. A sentence in a short story will naturally have a higher probability than an entire chapter in a novel, even if the model is equally good at predicting words in both.</li>
+<li>If we train the model and want to test how well it does, we need to consider that different documents will have different lengths, and that will impact the likelihood calculation.</li>
+</ul></li>
+<li>We need a way to normalize the likelihood to account for the length of sequence. This is where information theory comes in.
+<ul class="org-ul">
+<li>Cross Entropy Loss: (1/n) * Σ (-log P(xt | xt-1, &#x2026;, x1))
+<ul class="org-ul">
+<li>Where, n is the total number of tokens in the sequence.</li>
+<li>xt is the actual word predicted at time step t.</li>
+<li>P(xt | xt-1, &#x2026;, x1) is the model&rsquo;s prediction.</li>
+</ul></li>
+<li>Intuition:
+<ul class="org-ul">
+<li>For each word in the sequence, we calculate -log P(xt | xt-1, &#x2026;, x1). This is the surprisal of that word. The higher the probability the model assigns to the correct word, the lower the surprisal.</li>
+<li>We sum up the surprisal values for all words in the sequence.</li>
+<li>We sum up the surprisal values for all words in the sequence.</li>
+</ul></li>
+<li>The lower the cross-entropy loss, the better the model. It means the model is, on average, less surprised by the actual words in the sequence and requires fewer bits to encode them. This normalizes the length of the sequence.</li>
+<li>A good language model tells you how likely each word is, given the context. If the model is very confident that a particular word is coming next, we can use a short code to represent that word. If the model is uncertain, we need a longer code.</li>
+<li>Example: Encoding the sentence &ldquo;The cat sat on the mat.&rdquo;
+<ul class="org-ul">
+<li>Let&rsquo;s assume we have a language model and we want to encode this sentence using a variable-length code (like Huffman coding) that&rsquo;s based on the model&rsquo;s predictions.</li>
+
+<li>Word 1: &ldquo;The&rdquo;
+<ul class="org-ul">
+<li>Let&rsquo;s say our language model predicts that the probability of &ldquo;The&rdquo; starting a sentence is P(The) = 0.1.</li>
+<li>The surprisal is -log(0.1) ≈ 2.3 bits. This means we need about 2.3 bits to encode the word &ldquo;The&rdquo;.</li>
+</ul></li>
+
+<li>Word 2: &ldquo;cat&rdquo;
+<ul class="org-ul">
+<li>The model predicts P(cat | The) = 0.5. The model thinks &ldquo;cat&rdquo; is fairly likely to follow &ldquo;The.&rdquo;</li>
+<li>The surprisal is -log(0.5) ≈ 0.69 bits. We need fewer bits to encode &ldquo;cat&rdquo; because the model was more confident in its prediction.</li>
+</ul></li>
+
+<li>Word 3: &ldquo;sat&rdquo;
+<ul class="org-ul">
+<li>The model predicts P(sat | The, cat) = 0.2.</li>
+<li>The surprisal is -log(0.2) ≈ 1.61 bits.</li>
+</ul></li>
+
+<li>Word 4: &ldquo;on&rdquo;
+<ul class="org-ul">
+<li>The model predicts P(on | cat, sat) = 0.7. The model thinks &ldquo;on&rdquo; is highly likely to follow &ldquo;cat sat.&rdquo;</li>
+<li>The surprisal is -log(0.7) ≈ 0.36 bits. We need very few bits here.</li>
+</ul></li>
+
+<li>Word 5: &ldquo;the&rdquo;
+<ul class="org-ul">
+<li>The model predicts P(the | sat, on) = 0.4.</li>
+<li>The surprisal is -log(0.4) ≈ 0.92 bits.</li>
+</ul></li>
+
+<li>Word 6: &ldquo;mat&rdquo;
+<ul class="org-ul">
+<li>The model predicts P(mat | on, the) = 0.6.</li>
+<li>The surprisal is -log(0.6) ≈ 0.51 bits.</li>
+</ul></li>
+</ul></li>
+
+<li>Now, let&rsquo;s calculate the cross-entropy loss:
+<ul class="org-ul">
+<li>Sum of Surprisals: 2.3 + 0.69 + 1.61 + 0.36 + 0.92 + 0.51 ≈ 6.39 bits.</li>
+<li>Number of Words: n = 6</li>
+<li>Cross-Entropy Loss: (1/6) * 6.39 ≈ 1.065 bits per word.</li>
+</ul></li>
+
+<li>This means that, on average, our language model requires about 1.065 bits to encode each word in the sentence &ldquo;The cat sat on the mat.&rdquo;</li>
+
+<li>If we had a better language model, it would be more confident in its predictions. For example, it might predict P(cat | The) = 0.9 instead of 0.5. This would result in a lower surprisal value for &ldquo;cat&rdquo; and, ultimately, a lower cross-entropy loss for the entire sentence.</li>
+
+<li>Perplexity = exp((1/n) * Σ (-log P(xt | xt-1, &#x2026;, x1)))
+<ul class="org-ul">
+<li>It is simply the exponential of the cross entropy loss.</li>
+<li>Perplexity is a measure of how &ldquo;confused&rdquo; a language model is when predicting the next word in a sequence. A lower perplexity indicates that the model is more confident and accurate in its predictions.
+<ul class="org-ul">
+<li><b>Best Case: Perplexity=1:</b> The model always perfectly predicts the next word with a probability of 1. It&rsquo;s never surprised. This is the theoretical ideal, but it&rsquo;s practically impossible to achieve on real-world language data.</li>
+<li><b>Worst Case: Perplexity = Infinity:</b> The model always predicts the next word with a probability of 0. It&rsquo;s completely wrong every time.</li>
+<li><b>Baseline: Perplexity = Vocabulary Size:</b> If the model predicts a uniform distribution over all words in the vocabulary (i.e., it assigns equal probability to every word), then the perplexity is equal to the number of unique words in the vocabulary. This represents a naive model that has no knowledge of the language. The goal is to always beat this baseline.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2025-03-04 Tue 21:20</p>
+</div>
+</body>
+</html>
