@@ -258,3 +258,4 @@
     - W_{hh} ∈ R^{h x h}: The recurrent weight matrix connecting the previous hidden state to the current hidden state. This matrix determines how the past influences the present.
     - b_{h} ∈ R^{1 x h}: The bias vector. This is the same as in the MLP.
 - The main differences between MLP and RNNs are: H_{t-1} and W_{hh} which are the previous hidden state and the recurrent weight matrix. The MLP doesn't need any storage but RNNs does because they need to store the hidden states. Also, RNNs understand context but MLP doesn't. This is the reason why we use RNNs for language models.
+   

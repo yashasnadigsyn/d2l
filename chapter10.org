@@ -1,0 +1,20 @@
+#+title: Chapter 10 - Modern RNNs
+
+* LSTM
+- As discussed in the previous chapters, We can solve the exploding gradients problem with gradient clipping, but we still suffer
+  from vanishing gradients problem. LSTMs (Long Short-Term Memory networks) were designed specifically to address this problem.
+
+** The Memory Cell
+- LSTMs are essentially RNNs with a special "memory cell" that replaces the ordinary recurrent node in standard RNNs.
+- This memory cell is the heart of the LSTM and provides a mechanism for selectively remembering or forgetting information over time.
+- Each LSTM contains both long-term memory (weights) and short-term memory (activations), as well as a special medium-term memory.
+- The memory cell has an internal state and a number of "gates" that control the flow of information into and out of the cell.
+  - *Input Gate:* How much of the new input should affect the internal state.
+  - *Forget Gate:* Whether the current value of the memory should be flushed (set to zero).
+  - *Output Gate:* Whether the internal state of the neuron is allowed to affect the cell's output.
+
+- The purpose of the "gates" is to selectively modify the hidden state and thus enable longer term learning,
+  and help with the vanishing gradient problem.
+
+** Input Gate, Forget Gate and Output Gate
+- 
