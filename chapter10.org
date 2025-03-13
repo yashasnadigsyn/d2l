@@ -17,4 +17,21 @@
   and help with the vanishing gradient problem.
 
 ** Input Gate, Forget Gate and Output Gate
-- 
+- The data feeding into the LSTM gates are the input at the current time step and the hidden state of the previous time step.
+   
+  [[./images/LSTM1.png]] 
+
+- It = σ(Xt Wxi + Ht-1 Whi + bi)
+- Ft = σ(Xt Wxf + Ht-1 Whf + bf)
+- Ot = σ(Xt Wxo + Ht-1 Who + bo)
+
+- It, Ft, Ot ∈ R^{n x h}: The values of the input, forget, and output gates at time step t. The numbers are between 0 and 1 due to the sigmoid function.
+- σ: The sigmoid activation function. This squashes the values between 0 and 1, representing the degree to which the gate is "open" or "closed."
+- Xt ∈ R^{n x d}: The input at time step t. (Batch size n, input features d)
+- Ht-1 ∈ R^{n x h}: The hidden state from the previous time step. (Batch size n, hidden units h)
+- Wxi, Wxf, Wxo ∈ R^(d x h): Weight matrices connecting the input Xt to the input, forget, and output gates, respectively.
+- Whi, Whf, Who ∈ R^(h x h): Weight matrices connecting the previous hidden state Ht-1 to the input, forget, and output gates, respectively.
+- bi, bf, bo ∈ R^(1 x h): Bias vectors for the input, forget, and output gates, respectively.
+
+** Input Node
+- Ct = tanh(Xt Wxc + Ht-1 Whc + bc)

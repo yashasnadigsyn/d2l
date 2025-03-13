@@ -11,4 +11,5 @@
 - [[./chapter7.html]] - CNN
 - [[./chapter8.html]] - Modern CNN
 - [[./chapter9.html]] - RNNs
-- [[./chapter10.html]] - Modern RNNs
+- Moving to Obsidian, from Chapter 10.
+- You can find the Markdown notes in d2l folder.
