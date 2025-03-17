@@ -1,1 +1,4 @@
 - [[LSTM]]
+- [[GRU]]
+- [[Deep Recurrent Neural Network]]
+- [[Bidirectional Recurrent Neural Network]]
