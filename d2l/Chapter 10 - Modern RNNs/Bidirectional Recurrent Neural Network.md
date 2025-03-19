@@ -10,7 +10,7 @@
 
 - This is where Bidirectional RNNs comes in. Tasks like POS tagging and Masked Language Modeling (the above examples) need much more than unidirectional RNNs.
 - The core idea is to use two RNNs from each side.
-![[Pasted image 20250316190304.png]]
+![[Bidirection1.png]]
 - For the first RNN layer, the first input is x1 and the last input is xT , but for the second RNN layer, the first input is xT and the last input is x1. 
 - To produce the output of this bidirectional RNN layer, we simply concatenate together the corresponding outputs of the two underlying unidirectional RNN layers.
 - Formally,
