@@ -171,8 +171,9 @@
   "active": "026aa248166f3f8e",
   "lastOpenFiles": [
     "Chapter 10 - Modern RNNs/Seq-to-Seq1.png",
-    "Chapter 10 - Modern RNNs/Deep Recurrent Neural Network.md",
+    "Chapter 10 - Modern RNNs/Seq-to-Seq1.png",
     "Chapter 10 - Modern RNNs/Sequence-to-Sequence Learning.md",
+    "Chapter 10 - Modern RNNs/Deep Recurrent Neural Network.md",
     "Chapter 10 - Modern RNNs/Encoder-Decoder Architecture.md",
     "Chapter 10 - Modern RNNs/Chapter 10 - Modern RNNs.md",
     "Chapter 10 - Modern RNNs/EncDec1.png",
@@ -190,7 +191,6 @@
     "LSTM4.png",
     "LSTM1.png",
     "Chapter 10 - Modern RNNs.md",
-    "LSTM3.png",
     "LSTM.md",
     "templates",
     "Moder.md"

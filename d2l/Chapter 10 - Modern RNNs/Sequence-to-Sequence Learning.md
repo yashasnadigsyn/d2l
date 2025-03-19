@@ -46,5 +46,11 @@
 	- Then, to predict the next token, we can use an output layer and the softmax operation to compute the predictive distribution 𝑝(𝑦𝑡′+1 | 𝑦1, . . . , 𝑦𝑡′ , c) over the subsequent output token 𝑡′ + 1.
 
 ![[Seq-to-Seq1.png]]
-- **Evaluation of  a predicted sequence:**
-	- 
+
+- **Evaluation of a predicted sequence:**
+	- How can we measure how "good" a predicted sequence is compared to the correct "target" sequence? 
+	- It's not as simple as checking for exact word-for-word matches because translations can be phrased differently and still be correct.
+	- BLEU is introduced as a widely used metric, originally designed for machine translation, but applicable to evaluating the quality of output sequences in various tasks.
+	- BLEU's main principle is to check for **n-gram matches** between the predicted sequence and the target sequence.
+	- Look at this for further explanation: [[https://d2l.ai/chapter_recurrent-modern/seq2seq.html#evaluation-of-predicted-sequences]]
+	  
