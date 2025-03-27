@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "b916ca20f50f0178",
+        "id": "aab05d0c0cb5a5d0",
         "type": "tabs",
         "children": [
           {
-            "id": "3347411e04ea0dd3",
+            "id": "9e1c1ff98b375565",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Chapter 10 - Modern RNNs/Beam Search.md",
+                "file": "Chapter 11 - Attention Mechanisms and Transformers/The Bahdanau Attention Mechanism.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Beam Search"
+              "title": "The Bahdanau Attention Mechanism"
             }
           }
         ]
@@ -168,10 +168,21 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3347411e04ea0dd3",
+  "active": "9e1c1ff98b375565",
   "lastOpenFiles": [
-    "Chapter 10 - Modern RNNs/BeamSearch3.png",
+    "Chapter 11 - Attention Mechanisms and Transformers/BahdanauAttentionMechanism2.png",
+    "Chapter 11 - Attention Mechanisms and Transformers/The Bahdanau Attention Mechanism.md",
+    "Chapter 11 - Attention Mechanisms and Transformers/BahdanauAttentionMechanism1.png",
+    "Chapter 11 - Attention Mechanisms and Transformers/Attention Scoring Functions.md",
+    "Chapter 11 - Attention Mechanisms and Transformers/Queries,  Keys and Values.md",
+    "Chapter 11 - Attention Mechanisms and Transformers/AttentionScoringFunctions1.png",
+    "Chapter 11 - Attention Mechanisms and Transformers/Attention Pooling by Similarity.md",
+    "Chapter 11 - Attention Mechanisms and Transformers/Queries1.png",
+    "Pasted image 20250322103517.png",
+    "Backpropogation Algorithm.md",
+    "Chapter 11 - Attention Mechanisms and Transformers",
     "Chapter 10 - Modern RNNs/Beam Search.md",
+    "Chapter 10 - Modern RNNs/BeamSearch3.png",
     "Chapter 10 - Modern RNNs/BeamSearch2.png",
     "Chapter 10 - Modern RNNs/BeamSearch1.png",
     "Chapter 10 - Modern RNNs/Sequence-to-Sequence Learning.md",
@@ -180,16 +191,10 @@
     "Chapter 10 - Modern RNNs/Deep Recurrent Neural Network.md",
     "Chapter 10 - Modern RNNs/Encoder-Decoder Architecture.md",
     "Chapter 10 - Modern RNNs/Chapter 10 - Modern RNNs.md",
-    "Chapter 10 - Modern RNNs/EncDec1.png",
-    "Chapter 10 - Modern RNNs/Bidirection1.png",
     "Chapter 10 - Modern RNNs/Bidirectional Recurrent Neural Network.md",
-    "Chapter 10 - Modern RNNs/DRNN1.png",
     "Chapter 10 - Modern RNNs/LSTM.md",
     "Untitled.canvas",
     "Chapter 10 - Modern RNNs/GRU.md",
-    "Chapter 10 - Modern RNNs/GRU3.png",
-    "Chapter 10 - Modern RNNs/GRU2.png",
-    "Untitled",
     "Chapter 10 - Modern RNNs.md",
     "LSTM.md",
     "templates",
