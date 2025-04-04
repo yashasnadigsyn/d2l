@@ -8,17 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "87a54e21a2ae2d91",
+            "id": "7a336f3b2a73b500",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Chapter 11 - Attention Mechanisms and Transformers/Self-Attention and Positional Encoding.md",
+                "file": "Chapter 11 - Attention Mechanisms and Transformers/The Transformer Architecture.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Self-Attention and Positional Encoding"
+              "title": "The Transformer Architecture"
             }
           }
         ]
@@ -170,9 +170,11 @@
   },
   "active": "026aa248166f3f8e",
   "lastOpenFiles": [
+    "Chapter 11 - Attention Mechanisms and Transformers/TransformerArchitecture1.png",
+    "Chapter 11 - Attention Mechanisms and Transformers/Self-Attention and Positional Encoding.md",
+    "Chapter 11 - Attention Mechanisms and Transformers/The Transformer Architecture.md",
     "Chapter 11 - Attention Mechanisms and Transformers/SelfAttention1.png",
     "Chapter 11 - Attention Mechanisms and Transformers/Multi-Head Attention.md",
-    "Chapter 11 - Attention Mechanisms and Transformers/Self-Attention and Positional Encoding.md",
     "Chapter 11 - Attention Mechanisms and Transformers/MultiHeadAttention1.png",
     "Chapter 11 - Attention Mechanisms and Transformers/The Bahdanau Attention Mechanism.md",
     "Chapter 11 - Attention Mechanisms and Transformers/BahdanauAttentionMechanism2.png",
@@ -190,7 +192,6 @@
     "Chapter 10 - Modern RNNs/BeamSearch2.png",
     "Chapter 10 - Modern RNNs/BeamSearch1.png",
     "Chapter 10 - Modern RNNs/Sequence-to-Sequence Learning.md",
-    "Chapter 10 - Modern RNNs/Seq-to-Seq1.png",
     "Chapter 10 - Modern RNNs/Deep Recurrent Neural Network.md",
     "Chapter 10 - Modern RNNs/Encoder-Decoder Architecture.md",
     "Chapter 10 - Modern RNNs/Chapter 10 - Modern RNNs.md",
