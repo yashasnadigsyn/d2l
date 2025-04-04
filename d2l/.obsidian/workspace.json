@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "aab05d0c0cb5a5d0",
+        "id": "2251e4f6396c7d45",
         "type": "tabs",
         "children": [
           {
-            "id": "7a336f3b2a73b500",
+            "id": "065e5e091677688c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Chapter 11 - Attention Mechanisms and Transformers/The Transformer Architecture.md",
+                "file": "Chapter 11 - Attention Mechanisms and Transformers/Transformers For Vision.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "The Transformer Architecture"
+              "title": "Transformers For Vision"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Chapter 10 - Modern RNNs/Bidirectional Recurrent Neural Network.md",
+                "file": "Chapter 11 - Attention Mechanisms and Transformers/Transformers For Vision.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Bidirectional Recurrent Neural Network"
+              "title": "Backlinks for Transformers For Vision"
             }
           },
           {
@@ -168,11 +168,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "026aa248166f3f8e",
+  "active": "065e5e091677688c",
   "lastOpenFiles": [
+    "Chapter 11 - Attention Mechanisms and Transformers/Chapter 11 - Attention Mechanisms and Transformers.md",
+    "Chapter 10 - Modern RNNs/Chapter 10 - Modern RNNs.md",
+    "Chapter 11 - Attention Mechanisms and Transformers/Transformers For Vision.md",
+    "Chapter 11 - Attention Mechanisms and Transformers/TransformersForVision1.png",
+    "Chapter 11 - Attention Mechanisms and Transformers/The Transformer Architecture.md",
     "Chapter 11 - Attention Mechanisms and Transformers/TransformerArchitecture1.png",
     "Chapter 11 - Attention Mechanisms and Transformers/Self-Attention and Positional Encoding.md",
-    "Chapter 11 - Attention Mechanisms and Transformers/The Transformer Architecture.md",
     "Chapter 11 - Attention Mechanisms and Transformers/SelfAttention1.png",
     "Chapter 11 - Attention Mechanisms and Transformers/Multi-Head Attention.md",
     "Chapter 11 - Attention Mechanisms and Transformers/MultiHeadAttention1.png",
@@ -189,12 +193,9 @@
     "Chapter 11 - Attention Mechanisms and Transformers",
     "Chapter 10 - Modern RNNs/Beam Search.md",
     "Chapter 10 - Modern RNNs/BeamSearch3.png",
-    "Chapter 10 - Modern RNNs/BeamSearch2.png",
-    "Chapter 10 - Modern RNNs/BeamSearch1.png",
     "Chapter 10 - Modern RNNs/Sequence-to-Sequence Learning.md",
     "Chapter 10 - Modern RNNs/Deep Recurrent Neural Network.md",
     "Chapter 10 - Modern RNNs/Encoder-Decoder Architecture.md",
-    "Chapter 10 - Modern RNNs/Chapter 10 - Modern RNNs.md",
     "Chapter 10 - Modern RNNs/Bidirectional Recurrent Neural Network.md",
     "Chapter 10 - Modern RNNs/LSTM.md",
     "Untitled.canvas",

@@ -4,3 +4,4 @@
 - [[Bidirectional Recurrent Neural Network]]
 - [[Encoder-Decoder Architecture]]
 - [[Sequence-to-Sequence Learning]]
+- [[Beam Search]]
